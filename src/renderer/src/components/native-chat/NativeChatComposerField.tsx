@@ -1,3 +1,4 @@
+import { ClaudeComposerContextChip } from '@/fork/editor-context/EditorContextChip'
 import { NativeChatPromptEditor } from './NativeChatPromptEditor'
 import type { NativeChatComposerInput } from './native-chat-composer-input'
 import type { ClipboardEventHandler, KeyboardEventHandler, RefObject } from 'react'
@@ -302,6 +303,7 @@ export function NativeChatComposerField({
               '[contain:paint]'
             )}
           >
+            <ClaudeComposerContextChip agent={agent} scopeKey={draftScopeKey} />
             {imageAttachments.length > 0 ? (
               <div className="mb-2 flex flex-wrap gap-2 px-1 pt-1.5">
                 {imageAttachments.map((attachment, index) => (

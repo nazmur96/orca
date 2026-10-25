@@ -4,7 +4,7 @@ import { isTuiAgent } from '../../../../shared/tui-agent-config'
 import { MAX_SKILL_REFS } from '../../../../shared/rpc-contract/structured-agent-session-message-params'
 import { SkillRefLimitError } from '../../../../shared/structured-agent-session-send-mutation'
 import { promptSkillRefs } from './native-chat-prompt-document'
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { completeNativeChatStructuredUserAction } from './native-chat-structured-user-action'
 import {
   isStructuredAgentSessionComposerCommand,
@@ -30,6 +30,7 @@ import {
   resolveNativeChatPastedText
 } from './native-chat-composer-pasted-text-references'
 import { prepareEditorContext } from '@/fork/editor-context/editor-context-send'
+import { bindEditorContextChatWorktree } from '@/fork/editor-context/editor-context-store'
 
 export type UseNativeChatStructuredComposerSendArgs = {
   agent: AgentType
@@ -70,6 +71,12 @@ export function useNativeChatStructuredComposerSend({
   setDraft,
   setCaret
 }: UseNativeChatStructuredComposerSendArgs): NativeChatStructuredComposerSend {
+  const worktreeId = structuredTransport?.worktreeId
+  useEffect(() => {
+    if (worktreeId) {
+      bindEditorContextChatWorktree(draftScopeKey, worktreeId)
+    }
+  }, [draftScopeKey, worktreeId])
   return useCallback<NativeChatStructuredComposerSend>(
     async (text, attachments = imageAttachments): Promise<void> => {
       // Picked commands must also wait for pending attachments to acquire paths.

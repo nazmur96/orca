@@ -11,6 +11,7 @@ const DEFAULT_CHAT: EditorContextChatState = { lastSent: null, skipNext: false, 
 
 const entries = new Map<string, EditorContextEntry>()
 const chats = new Map<string, EditorContextChatState>()
+const chatWorktrees = new Map<string, string>()
 const listeners = new Set<() => void>()
 
 function emit(): void {
@@ -53,6 +54,18 @@ export function updateEditorContextChat(
   emit()
 }
 
+/** Structured chats bind their worktree so the chip can show that worktree's editor. */
+export function bindEditorContextChatWorktree(scopeKey: string, worktreeId: string): void {
+  if (chatWorktrees.get(scopeKey) !== worktreeId) {
+    chatWorktrees.set(scopeKey, worktreeId)
+    emit()
+  }
+}
+
+export function useEditorContextChatWorktree(scopeKey: string): string | undefined {
+  return useSyncExternalStore(subscribe, () => chatWorktrees.get(scopeKey))
+}
+
 export function useEditorContextEntry(worktreeId: string | undefined): EditorContextEntry | null {
   return useSyncExternalStore(subscribe, () =>
     worktreeId ? readEditorContextEntry(worktreeId) : null
@@ -66,5 +79,6 @@ export function useEditorContextChat(scopeKey: string): EditorContextChatState {
 export function resetEditorContextStoreForTests(): void {
   entries.clear()
   chats.clear()
+  chatWorktrees.clear()
   listeners.clear()
 }

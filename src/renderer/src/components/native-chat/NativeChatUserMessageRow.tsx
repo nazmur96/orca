@@ -14,6 +14,8 @@ import { NativeChatCodeBlock } from './NativeChatCodeBlock'
 import { NativeChatCopyButton } from './NativeChatCopyButton'
 import { NativeChatMessageTimestamp } from './NativeChatMessageTimestamp'
 import { NativeChatAgentMessageCard } from './NativeChatAgentMessageCard'
+import { parseEditorContextBlock } from '@/fork/editor-context/editor-context-block'
+import { EditorContextTranscriptChip } from '@/fork/editor-context/EditorContextChip'
 import {
   NativeChatDetailsDisclosure,
   NativeChatImageAttachments
@@ -87,11 +89,13 @@ export function NativeChatUserMessageRow({
   // Agent-authored input belongs to the turn but uses a left-aligned sender row instead of the person’s bubble.
   const from = message.from
   const sending = deliveryNotice?.sending === true
+  const editorContext = parseEditorContextBlock(markdown)
+  const shownMarkdown = editorContext ? editorContext.body : markdown
   return (
     <div
       ref={rowRef}
       // Read by the context menu: only rows showing the hover copy or rewind offer them there.
-      data-native-chat-message-id={markdown ? message.id : undefined}
+      data-native-chat-message-id={shownMarkdown ? message.id : undefined}
       data-native-chat-rewind-item={rewind && !sending ? message.id : undefined}
       className={cn('group relative flex flex-col gap-0.5', from ? 'items-start' : 'items-end')}
     >
@@ -106,7 +110,10 @@ export function NativeChatUserMessageRow({
         />
       ) : (
         <div className="max-w-[80%] rounded-xl border border-chat-user-border bg-chat-user-surface px-3.5 py-2.5 text-sm text-chat-foreground-strong">
-          {markdown ? (
+          {editorContext ? (
+            <EditorContextTranscriptChip snapshot={editorContext.snapshot} />
+          ) : null}
+          {shownMarkdown ? (
             <>
               <NativeChatImageAttachments
                 blocks={prose}
@@ -115,12 +122,12 @@ export function NativeChatUserMessageRow({
               />
               <NativeChatUserMessageFold
                 messageId={message.id}
-                markdown={markdown}
+                markdown={shownMarkdown}
                 onRefolded={onRefolded}
               >
                 <NativeChatMarkdown
                   rowKey={message.id}
-                  content={markdown}
+                  content={shownMarkdown}
                   variant="document"
                   className="text-sm"
                   renderCodeBlock={NativeChatCodeBlock}
@@ -146,7 +153,7 @@ export function NativeChatUserMessageRow({
       ) : null}
       {!from ? (
         <UserMessageMeta
-          markdown={markdown}
+          markdown={shownMarkdown}
           timestamp={message.timestamp}
           sending={sending}
           {...(rewind ? { rewind: { itemId: message.id, surface: rewind } } : {})}
