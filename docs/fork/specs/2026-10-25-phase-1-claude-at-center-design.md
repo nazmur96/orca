@@ -112,8 +112,9 @@ selection and diagnostics) and the remaining text as the message.
   to chat".
 - Inserts a quoted reference (`src/api/user.ts:42-58` plus a fenced code
   block) into the worktree's active Claude chat composer through the existing
-  draft-addition API, and focuses the composer. No active chat → opens a new
-  Claude chat tab in that worktree first.
+  draft-addition API and activates that chat tab (the last Claude chat in the
+  worktree). No Claude chat → a toast asks to open one; opening a chat from the
+  editor needs agent detection and host probing, deferred past Phase 1.
 
 ## C. Permission-mode shortcut
 
