@@ -99,6 +99,9 @@ docs/**
 !docs/styleguide/**
 !docs/agents-md-refs/
 !docs/agents-md-refs/**
+# Fork-only: nazmur96/orca specs and plans are tracked.
+!docs/fork/
+!docs/fork/**
 !docs/agent-skill-sharing-implementation-checklist.md
 !docs/mobile-terminal-shortcut-bar.md
 
