@@ -1,4 +1,5 @@
 import { ClaudeComposerContextChip } from '@/fork/editor-context/EditorContextChip'
+import { cyclePermissionModeOnKey } from '@/fork/editor-context/permission-mode-cycle'
 import { NativeChatPromptEditor } from './NativeChatPromptEditor'
 import type { NativeChatComposerInput } from './native-chat-composer-input'
 import type { ClipboardEventHandler, KeyboardEventHandler, RefObject } from 'react'
@@ -325,7 +326,13 @@ export function NativeChatComposerField({
               initialValue={draft}
               disabled={disabled}
               onChange={editorChange}
-              onKeyDownCapture={editorKeyDownCapture}
+              onKeyDownCapture={(event) => {
+                if (cyclePermissionModeOnKey(event, sessionOptionsSurface, sessionOptionsSnapshot)) {
+                  event.preventDefault()
+                  return
+                }
+                editorKeyDownCapture(event)
+              }}
               onKeyUp={editorKeyUp}
               onBlur={editorBlur}
               onCompositionStart={editorCompositionStart}
