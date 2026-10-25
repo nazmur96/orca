@@ -30,6 +30,7 @@ import {
 } from '@/lib/monaco-languages/plugin-syntax-editor-options'
 import { useMonacoTheme } from '@/hooks/use-monaco-theme'
 import { useEditorModelRekeyCarry } from './editor-model-rekey-carry'
+import { useEditorContextTracking } from '@/fork/editor-context/use-editor-context-tracking'
 
 type MonacoEditorProps = {
   fileId: string
@@ -233,6 +234,14 @@ export default function MonacoEditor({
       setGutterMenuLine,
       setGutterMenuSelection
     }
+  })
+
+  useEditorContextTracking({
+    editor: mountedEditor,
+    worktreeId,
+    relativePath,
+    language,
+    enabled: !readOnly && !passiveMirror
   })
 
   useEffect(() => {

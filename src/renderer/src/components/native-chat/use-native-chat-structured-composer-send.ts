@@ -29,6 +29,7 @@ import {
   admitNativeChatPastedText,
   resolveNativeChatPastedText
 } from './native-chat-composer-pasted-text-references'
+import { prepareEditorContext } from '@/fork/editor-context/editor-context-send'
 
 export type UseNativeChatStructuredComposerSendArgs = {
   agent: AgentType
@@ -117,9 +118,13 @@ export function useNativeChatStructuredComposerSend({
           }
         }
       )
+      const context =
+        agent === 'claude' && !hostCommand
+          ? prepareEditorContext(draftScopeKey, structuredTransport.worktreeId, text)
+          : null
       await dispatchNativeChatStructuredComposerText(
         structuredTransport,
-        text,
+        context?.text ?? text,
         attachments,
         promptSkillRefs(submitted.document)
       )
@@ -130,6 +135,7 @@ export function useNativeChatStructuredComposerSend({
           if (!accepted) {
             return
           }
+          context?.commit()
           completeNativeChatStructuredUserAction(
             agent,
             structuredTransport,
