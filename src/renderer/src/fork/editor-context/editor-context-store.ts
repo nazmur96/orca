@@ -31,8 +31,8 @@ export function setEditorContextEntry(worktreeId: string, entry: EditorContextEn
 }
 
 /** Only the editor that owns the entry may clear it, so closing a background tab keeps the focused one. */
-export function clearEditorContextEntry(worktreeId: string, owner: object): void {
-  if (entries.get(worktreeId)?.owner === owner) {
+export function clearEditorContextEntry(worktreeId: string, ownerId: string): void {
+  if (entries.get(worktreeId)?.ownerId === ownerId) {
     entries.delete(worktreeId)
     emit()
   }

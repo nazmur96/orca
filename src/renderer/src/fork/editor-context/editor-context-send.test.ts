@@ -7,11 +7,9 @@ import {
   updateEditorContextChat
 } from './editor-context-store'
 
-const owner = {}
-
 function track(cursorLine = 3): void {
   setEditorContextEntry('wt', {
-    owner,
+    ownerId: 'editor-1',
     file: 'a.ts',
     language: 'typescript',
     cursorLine,

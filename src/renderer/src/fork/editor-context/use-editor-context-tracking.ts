@@ -28,7 +28,7 @@ export function useEditorContextTracking({
         return
       }
       setEditorContextEntry(worktreeId, {
-        owner: codeEditor,
+        ownerId: codeEditor.getId(),
         file: relativePath,
         language,
         cursorLine: selection.positionLineNumber,
@@ -62,7 +62,7 @@ export function useEditorContextTracking({
         subscription.dispose()
       }
       removeShortcut()
-      clearEditorContextEntry(worktreeId, codeEditor)
+      clearEditorContextEntry(worktreeId, codeEditor.getId())
     }
   }, [codeEditor, worktreeId, relativePath, language, enabled])
 }

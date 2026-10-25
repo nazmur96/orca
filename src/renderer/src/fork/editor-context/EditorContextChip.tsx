@@ -30,11 +30,15 @@ export function EditorContextComposerChip({
           type="button"
           variant="ghost"
           size="xs"
-          className="text-chat-foreground-faint"
           onClick={() => updateEditorContextChat(scopeKey, { disabled: false, lastSent: null })}
         >
           <FileCode className="size-3.5" aria-hidden />
-          {translate('components.native-chat.editorContext.turnOn', 'Editor context off — turn on')}
+          <span className="text-chat-foreground-faint">
+            {translate(
+              'components.native-chat.editorContext.turnOn',
+              'Editor context off — turn on'
+            )}
+          </span>
         </Button>
       </div>
     )
@@ -51,11 +55,11 @@ export function EditorContextComposerChip({
           'components.native-chat.editorContext.toggleNext',
           'Include the editor context in the next message'
         )}
-        className={cn('max-w-full min-w-0 shrink', chat.skipNext && 'line-through opacity-60')}
+        className="max-w-full min-w-0 shrink"
         onClick={() => updateEditorContextChat(scopeKey, { skipNext: !chat.skipNext })}
       >
         <FileCode className="size-3.5 shrink-0" aria-hidden />
-        <span className="truncate">{label}</span>
+        <span className={cn('truncate', chat.skipNext && 'line-through opacity-60')}>{label}</span>
       </Button>
       <Button
         type="button"
