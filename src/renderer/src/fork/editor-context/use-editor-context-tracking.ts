@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import * as monaco from 'monaco-editor'
 import type { editor } from 'monaco-editor'
-import { clearEditorContextEntry, setEditorContextEntry } from './editor-context-store'
+import { freezeEditorContextEntry, setEditorContextEntry } from './editor-context-store'
 import { installAddSelectionToChatShortcut } from './editor-context-add-selection'
 
 export function useEditorContextTracking({
@@ -62,7 +62,7 @@ export function useEditorContextTracking({
         subscription.dispose()
       }
       removeShortcut()
-      clearEditorContextEntry(worktreeId, codeEditor.getId())
+      freezeEditorContextEntry(worktreeId, codeEditor.getId())
     }
   }, [codeEditor, worktreeId, relativePath, language, enabled])
 }

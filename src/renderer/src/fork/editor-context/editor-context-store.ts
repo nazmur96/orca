@@ -30,12 +30,15 @@ export function setEditorContextEntry(worktreeId: string, entry: EditorContextEn
   emit()
 }
 
-/** Only the editor that owns the entry may clear it, so closing a background tab keeps the focused one. */
-export function clearEditorContextEntry(worktreeId: string, ownerId: string): void {
-  if (entries.get(worktreeId)?.ownerId === ownerId) {
-    entries.delete(worktreeId)
-    emit()
+/** An unmounted editor (e.g. its tab hidden for the chat) keeps its context; only the owner may freeze it. */
+export function freezeEditorContextEntry(worktreeId: string, ownerId: string): void {
+  const entry = entries.get(worktreeId)
+  if (entry?.ownerId !== ownerId) {
+    return
   }
+  const markers = entry.readMarkers()
+  entries.set(worktreeId, { ...entry, readMarkers: () => markers })
+  emit()
 }
 
 export function readEditorContextEntry(worktreeId: string): EditorContextEntry | null {

@@ -1,7 +1,9 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { prepareEditorContext } from './editor-context-send'
 import {
+  freezeEditorContextEntry,
   readEditorContextChat,
+  readEditorContextEntry,
   resetEditorContextStoreForTests,
   setEditorContextEntry,
   updateEditorContextChat
@@ -52,5 +54,32 @@ describe('prepareEditorContext', () => {
     expect(readEditorContextChat('chat').skipNext).toBe(false)
     updateEditorContextChat('chat', { disabled: true })
     expect(prepareEditorContext('chat', 'wt', 'b').text).toBe('b')
+  })
+})
+
+describe('an editor unmounted by a tab switch', () => {
+  beforeEach(() => resetEditorContextStoreForTests())
+
+  it('keeps its last context, with the diagnostics it had', () => {
+    let markers = [{ startLineNumber: 2, severity: 8, message: 'boom' }]
+    setEditorContextEntry('wt', {
+      ownerId: 'editor-1',
+      file: 'a.ts',
+      language: 'typescript',
+      cursorLine: 2,
+      selection: { startLine: 1, endLine: 2, text: 'x\ny' },
+      readMarkers: () => markers
+    })
+    freezeEditorContextEntry('wt', 'editor-1')
+    markers = []
+    const { text } = prepareEditorContext('chat', 'wt', 'hi')
+    expect(text).toContain('selection: lines 1-2')
+    expect(text).toContain('- L2 error: boom')
+  })
+
+  it('leaves a newer editor entry alone', () => {
+    track()
+    freezeEditorContextEntry('wt', 'someone-else')
+    expect(readEditorContextEntry('wt')?.ownerId).toBe('editor-1')
   })
 })
