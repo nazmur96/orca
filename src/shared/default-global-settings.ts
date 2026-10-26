@@ -231,7 +231,7 @@ export function buildDefaultSettings(args: {
     agentDefaultArgs: {},
     agentDefaultEnv: {},
     agentYoloDefaultsMigrated: true,
-    agentPermissionDefault: 'full-access',
+    agentPermissionDefault: 'auto',
     agentPermissionOverrides: {},
     agentStatusHooksEnabled: true,
     claudeSubagentNavigationEnabled: true,

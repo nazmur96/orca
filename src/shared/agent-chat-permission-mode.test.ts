@@ -3,7 +3,8 @@ import {
   AGENT_CHAT_PERMISSION_MODES,
   agentChatPermissionModes,
   newChatPermissionMode,
-  savedChatPermissionMode
+  savedChatPermissionMode,
+  newChatPermissionModeForSettings
 } from './agent-chat-permission-mode'
 
 const CLAUDE_CHAT_PERMISSION_MODES = agentChatPermissionModes('claude')!
@@ -40,5 +41,11 @@ describe('the mode a chat runs', () => {
     expect(savedChatPermissionMode(CLAUDE_CHAT_PERMISSION_MODES, null)).toBe('ask')
     expect(savedChatPermissionMode(CODEX_CHAT_PERMISSION_MODES, 'accept-edits')).toBe('ask')
     expect(savedChatPermissionMode(CLAUDE_CHAT_PERMISSION_MODES, 'bypassPermissions')).toBe('ask')
+  })
+})
+
+describe('fork: a fresh profile', () => {
+  it('starts new Claude chats in Auto', () => {
+    expect(newChatPermissionModeForSettings('claude', getDefaultSettings('/tmp'))).toBe('auto')
   })
 })
