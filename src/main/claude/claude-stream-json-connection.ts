@@ -1,3 +1,4 @@
+import { orcaAppToolOptions } from '../fork/app-tools/orca-app-mcp-server'
 import type { PipedProcessSpawner } from '@orca/process-host/process-spec'
 import type * as ClaudeAgentSdk from '@anthropic-ai/claude-agent-sdk'
 import type { CanUseTool, OnUserDialog, SDKUserMessage } from '@anthropic-ai/claude-agent-sdk'
@@ -98,7 +99,8 @@ export async function openClaudeStreamJsonConnection(
   spawnImpl: PipedProcessSpawner = spawnProcess,
   queryImpl?: typeof ClaudeAgentSdk.query
 ): Promise<ClaudeStreamJsonConnection> {
-  const { query } = await loadClaudeAgentSdk()
+  const sdk = await loadClaudeAgentSdk()
+  const { query } = sdk
   const spawner = createClaudeCodeProcessSpawn(spawnImpl, process.platform, launch)
   // Always supply scrubbed env to prevent ambient auth leaks; only launch.env may pin CLAUDE_CONFIG_DIR.
   const env = await withoutRejectedClaudeApiKey(
@@ -115,6 +117,7 @@ export async function openClaudeStreamJsonConnection(
     prompt: inbox.messages,
     options: {
       ...launch.options,
+      ...orcaAppToolOptions(sdk, env, launch.cwd),
       cwd: launch.cwd,
       env,
       pathToClaudeCodeExecutable: launch.pathToClaudeCodeExecutable,

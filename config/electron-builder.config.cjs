@@ -107,6 +107,11 @@ const featureWallResources = {
   from: 'resources/onboarding/feature-wall',
   to: 'onboarding/feature-wall'
 }
+// Fork: Claude's search_orca_docs tool reads the user docs from resources.
+const forkDocsResources = {
+  from: 'docs/site/content/docs',
+  to: 'fork-docs'
+}
 // Freshness checks need immutable build identity, not skill bytes or runtime network access.
 const skillFreshnessResources = {
   from: 'resources/skills',
@@ -548,7 +553,8 @@ module.exports = {
         from: 'native/computer-use-windows/runtime.ps1',
         to: 'computer-use-windows/runtime.ps1'
       },
-      featureWallResources
+      featureWallResources,
+      forkDocsResources
     ]
   },
   nsis: {
@@ -610,7 +616,8 @@ module.exports = {
         from: 'native/computer-use-macos/.build/release/Orca Computer Use.app',
         to: 'Orca Computer Use.app'
       },
-      featureWallResources
+      featureWallResources,
+      forkDocsResources
     ],
     // macOS 26 UNUserNotificationCenter aborts helpers launched from Resources; execute from Contents/MacOS (#7929).
     extraFiles: [
@@ -679,7 +686,8 @@ module.exports = {
         from: 'native/computer-use-linux/runtime.py',
         to: 'computer-use-linux/runtime.py'
       },
-      featureWallResources
+      featureWallResources,
+      forkDocsResources
     ],
     // Keep local artifacts aligned with the release pipeline.
     target: ['AppImage', 'deb', 'rpm'],
