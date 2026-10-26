@@ -50,6 +50,11 @@ export type AiVaultApi = {
   prepareSessionResume: (
     args: AiVaultPrepareSessionResumeRequest
   ) => Promise<AiVaultPrepareSessionResumeResult>
+  /** Fork: an unowned copy of a local Claude chat for a side chat. */
+  copyChatForSideChat: (source: {
+    sessionId: string
+    workspaceId: string
+  }) => Promise<{ sessionId: string }>
   listSubagentSessions: (args: AiVaultSubagentListArgs) => Promise<AiVaultSubagentListResult>
   getFirstUserPrompt: (args: AiVaultFirstUserPromptArgs) => Promise<AiVaultFirstUserPromptResult>
   /** Moves a deletable session's transcript to the OS trash; local sessions only. */

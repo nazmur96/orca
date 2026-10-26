@@ -22,18 +22,16 @@ function parseTranscriptEntry(line: string): SessionStoreEntry | undefined {
   }
 }
 
-/** Use Claude's fork implementation for branch selection, compaction and UUID remapping. */
-export async function materializeClaudeRewindTranscript(
+/** Use Claude's fork implementation for branch selection, compaction and UUID remapping; no cut point copies it all. */
+export async function forkClaudeTranscript(
   sourcePath: string,
-  fork: AgentSessionRewindFork
-): Promise<AgentSessionRewindFork> {
-  if (!fork.throughEntryId) {
-    return { ...fork, materialized: true }
-  }
+  sourceSessionId: string,
+  upToMessageId?: string
+): Promise<{ sessionId: string; resumeCursor: string | undefined; filePath: string }> {
   const { forkSession } = await loadClaudeAgentSdk()
   let resumeCursor: string | undefined
-  const result = await forkSession(fork.sourceSessionId, {
-    upToMessageId: fork.throughEntryId,
+  const result = await forkSession(sourceSessionId, {
+    ...(upToMessageId ? { upToMessageId } : {}),
     // Pin reads and writes to the resolved account without mutating process.env.
     sessionStore: {
       load: async () => {
@@ -55,8 +53,12 @@ export async function materializeClaudeRewindTranscript(
           (entry) => entry.type === 'assistant' || entry.type === 'user'
         )?.uuid
         if (!resumeCursor) {
+<<<<<<< HEAD
           // Metadata alone uses the same fresh launch as a rewind with no parent.
           return
+=======
+          throw new Error('claude fork is missing its resume point')
+>>>>>>> 5ba87200e (feat(fork): copy Claude chat conversations for side chats)
         }
         const destination = join(dirname(sourcePath), `${key.sessionId}.jsonl`)
         const temporary = durableWriteTempPath(destination)
@@ -73,6 +75,7 @@ export async function materializeClaudeRewindTranscript(
       }
     }
   })
+<<<<<<< HEAD
   return resumeCursor
     ? { ...fork, sessionId: result.sessionId, resumeCursor, materialized: true }
     : {
@@ -81,4 +84,26 @@ export async function materializeClaudeRewindTranscript(
         replacesSessionId: fork.replacesSessionId,
         materialized: true
       }
+=======
+  return {
+    sessionId: result.sessionId,
+    resumeCursor,
+    filePath: join(dirname(sourcePath), `${result.sessionId}.jsonl`)
+  }
+}
+
+export async function materializeClaudeRewindTranscript(
+  sourcePath: string,
+  fork: AgentSessionRewindFork
+): Promise<AgentSessionRewindFork> {
+  if (!fork.throughEntryId) {
+    return { ...fork, materialized: true }
+  }
+  const { sessionId, resumeCursor } = await forkClaudeTranscript(
+    sourcePath,
+    fork.sourceSessionId,
+    fork.throughEntryId
+  )
+  return { ...fork, sessionId, resumeCursor, materialized: true }
+>>>>>>> 5ba87200e (feat(fork): copy Claude chat conversations for side chats)
 }

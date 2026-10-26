@@ -44,7 +44,12 @@ import {
 } from './claude-structured-prompt-ownership'
 import { claudePromptCancelRoute } from './claude-structured-prompt-replies'
 import { claudeForkForRewind } from './claude-rewind-fork'
+<<<<<<< HEAD
 import { openClaudeStructuredSession } from './structured/claude-structured-session-open'
+=======
+import { claudeCopyConversation } from './claude-conversation-copy'
+import { openClaudeStructuredSession } from './claude-structured-session-open'
+>>>>>>> 5ba87200e (feat(fork): copy Claude chat conversations for side chats)
 
 export type { ClaudeStructuredLaunch } from './claude-structured-launch-resolution'
 
@@ -142,6 +147,7 @@ export class ClaudeStructuredSessionAdapter implements StructuredAgentSessionAda
   }
 
   forkForRewind = claudeForkForRewind
+  copyConversation = claudeCopyConversation
   compact: NonNullable<StructuredAgentSessionAdapter['compact']> = (input) =>
     dispatchClaudeCommand(this.session(input.sessionId), input.command)
 

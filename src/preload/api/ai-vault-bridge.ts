@@ -51,6 +51,8 @@ export const aiVaultApi = {
     ipcRenderer.invoke('aiVault:cancelListSessions', args),
   prepareSessionResume: (args: AiVaultPrepareSessionResumeRequest) =>
     ipcRenderer.invoke('aiVault:prepareSessionResume', args),
+  copyChatForSideChat: (source: { sessionId: string; workspaceId: string }) =>
+    ipcRenderer.invoke('aiVault:copyChatForSideChat', source),
   listSubagentSessions: (args: AiVaultSubagentListArgs) =>
     ipcRenderer.invoke('aiVault:listSubagentSessions', args),
   getFirstUserPrompt: (args: AiVaultFirstUserPromptArgs) =>
