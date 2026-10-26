@@ -1,3 +1,4 @@
+import { seedStartupDefaultSurface } from '@/fork/startup/startup-default-surface'
 import { useEffect, useMemo, useRef } from 'react'
 import { findActivityTerminalPortal } from './activity/activity-terminal-portal'
 import { shouldAutoCreateInitialTerminal } from './terminal/initial-terminal'
@@ -254,16 +255,23 @@ export function useTerminalWatcherEffects(controller: TerminalWatcherController)
         activeWorktreeId
       )
       if (shouldAutoCreateInitialTerminal(renderableTabCount, activeWorktreeHasTerminalState)) {
-        if (
-          ORCA_LAYOUT_OWNER_IS_MAIN &&
-          createInitialTerminalThroughLayoutOwner(useAppStore.getState, activeWorktreeId, () =>
-            createTab(activeWorktreeId, undefined, undefined, { pendingActivationSpawn: true })
-          )
-        ) {
-          return
+        const createShell = (): void => {
+          if (
+            ORCA_LAYOUT_OWNER_IS_MAIN &&
+            createInitialTerminalThroughLayoutOwner(useAppStore.getState, activeWorktreeId, () =>
+              createTab(activeWorktreeId, undefined, undefined, { pendingActivationSpawn: true })
+            )
+          ) {
+            return
+          }
+          // Initial default tabs must not count as user activity and reorder the sidebar; explicit New Tab still does.
+          createTab(activeWorktreeId, undefined, undefined, { pendingActivationSpawn: true })
         }
-        // Initial default tabs must not count as user activity and reorder the sidebar; explicit New Tab still does.
-        createTab(activeWorktreeId, undefined, undefined, { pendingActivationSpawn: true })
+        void seedStartupDefaultSurface(
+          activeWorktreeId,
+          createShell,
+          () => !cancelled && useAppStore.getState().activeWorktreeId === activeWorktreeId
+        )
       }
     })
     return () => {
