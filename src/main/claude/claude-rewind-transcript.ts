@@ -53,12 +53,8 @@ export async function forkClaudeTranscript(
           (entry) => entry.type === 'assistant' || entry.type === 'user'
         )?.uuid
         if (!resumeCursor) {
-<<<<<<< HEAD
           // Metadata alone uses the same fresh launch as a rewind with no parent.
           return
-=======
-          throw new Error('claude fork is missing its resume point')
->>>>>>> 5ba87200e (feat(fork): copy Claude chat conversations for side chats)
         }
         const destination = join(dirname(sourcePath), `${key.sessionId}.jsonl`)
         const temporary = durableWriteTempPath(destination)
@@ -75,16 +71,6 @@ export async function forkClaudeTranscript(
       }
     }
   })
-<<<<<<< HEAD
-  return resumeCursor
-    ? { ...fork, sessionId: result.sessionId, resumeCursor, materialized: true }
-    : {
-        sessionId: fork.sessionId,
-        sourceSessionId: fork.sourceSessionId,
-        replacesSessionId: fork.replacesSessionId,
-        materialized: true
-      }
-=======
   return {
     sessionId: result.sessionId,
     resumeCursor,
@@ -104,6 +90,12 @@ export async function materializeClaudeRewindTranscript(
     fork.sourceSessionId,
     fork.throughEntryId
   )
-  return { ...fork, sessionId, resumeCursor, materialized: true }
->>>>>>> 5ba87200e (feat(fork): copy Claude chat conversations for side chats)
+  return resumeCursor
+    ? { ...fork, sessionId, resumeCursor, materialized: true }
+    : {
+        sessionId: fork.sessionId,
+        sourceSessionId: fork.sourceSessionId,
+        replacesSessionId: fork.replacesSessionId,
+        materialized: true
+      }
 }

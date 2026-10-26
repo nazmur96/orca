@@ -1,5 +1,6 @@
 import { ClaudeComposerContextChip } from '@/fork/editor-context/EditorContextChip'
 import { cyclePermissionModeOnKey } from '@/fork/editor-context/permission-mode-cycle'
+import { useSideChatAskMode } from '@/fork/side-chat/use-side-chat-ask-mode'
 import { NativeChatPromptEditor } from './NativeChatPromptEditor'
 import type { NativeChatComposerInput } from './native-chat-composer-input'
 import type { ClipboardEventHandler, KeyboardEventHandler, RefObject } from 'react'
@@ -172,6 +173,7 @@ export function NativeChatComposerField({
   agent
 }: NativeChatComposerFieldProps): React.JSX.Element {
   const draftNotSaved = useNativeChatComposerDraftUnsaved(draftScopeKey)
+  useSideChatAskMode(draftScopeKey, sessionOptionsSurface, sessionOptionsSnapshot)
   const optionCount =
     autocomplete.mode === 'slash'
       ? autocomplete.items.length

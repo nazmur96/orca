@@ -101,6 +101,7 @@ export type KeybindingActionId =
   | 'editor.nextChange'
   | 'editor.addReviewNote'
   | 'editor.addSelectionToChat'
+  | 'chat.openSideChat'
   | 'sourceControl.sendReviewNotes'
   | 'fileExplorer.undo'
   | 'fileExplorer.redo'

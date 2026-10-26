@@ -114,5 +114,13 @@ export const KEYBINDING_DEFINITION_CORE_4: readonly KeybindingDefinition[] = [
     scope: 'editor',
     searchKeywords: ['shortcut', 'editor', 'selection', 'chat', 'claude', 'agent', 'context'],
     defaultBindings: platformBindings(['Mod+Shift+L'])
+  },
+  {
+    id: 'chat.openSideChat',
+    title: 'Open side chat',
+    group: 'Chat',
+    scope: 'chat',
+    searchKeywords: ['shortcut', 'chat', 'side', 'fork', 'btw', 'question'],
+    defaultBindings: platformBindings(['Mod+;'])
   }
 ]

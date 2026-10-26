@@ -16,6 +16,13 @@ export const claudeCopyConversation: NonNullable<
   if (!sourcePath) {
     throw new Error('The Claude conversation to copy was not found.')
   }
-  const { sessionId, filePath } = await forkClaudeTranscript(sourcePath, providerSessionId)
+  const { sessionId, resumeCursor, filePath } = await forkClaudeTranscript(
+    sourcePath,
+    providerSessionId
+  )
+  // Without a message the SDK writes no copy, so there is nothing to continue from.
+  if (!resumeCursor) {
+    throw new Error('The Claude conversation has no messages to copy yet.')
+  }
   return { sessionId, filePath }
 }

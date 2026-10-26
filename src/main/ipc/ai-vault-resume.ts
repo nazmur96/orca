@@ -11,12 +11,9 @@ import { isWslUncPath } from '../../shared/wsl-paths'
 import { assertLegacyAiVaultResumeAllowed } from '../ai-vault/structured-session-ownership'
 import { tryEnsureStructuredAgentSessionHostForResume } from '../runtime/structured-agent-session-host-refusal'
 import { copyStructuredChatConversation } from '../ai-vault/structured-chat-conversation-copy'
-<<<<<<< HEAD
 import { wakeNativeChatTranscriptDistro } from '../native-chat/native-chat-open-wake'
 import { wslDistroForPath } from '../wsl/wsl-unc-access-gate'
-=======
 import { copyChatForSideChat } from '../fork/side-chat-conversation-copy'
->>>>>>> 5ba87200e (feat(fork): copy Claude chat conversations for side chats)
 
 export type AiVaultResumeHandlerOptions = {
   ensureStructuredSessionOwnership?: () => Promise<void>
