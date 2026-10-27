@@ -1,4 +1,5 @@
 import { conversationRecordReader } from './orchestration/structured-session-lineage'
+import { registerForkSettingsRuntime } from '../fork/fork-settings-runtime'
 import type { RuntimeLinearCommandSurface } from './runtime-linear-command-surface'
 import { installRuntimeLinearCommandSurface } from './runtime-linear-command-surface'
 import { publishWorkspaceViewChanges } from './runtime-workspace-view-change-events'
@@ -167,6 +168,7 @@ class OrcaRuntimeService extends OrcaRuntimeSidebarBase {
     registerDetectedWorktreeScanInvalidation()
     registerWorktreeChangeInvalidator((repoId) => this.invalidateWorktreeCatalog(repoId))
     publishWorkspaceViewChanges(this.store, (event) => this.emitClientEvent(event))
+    registerForkSettingsRuntime(this)
   }
 
   private structuredAgentAvailability?: ReturnType<typeof installStructuredAgentAvailability>

@@ -2,12 +2,18 @@ import type * as ClaudeAgentSdk from '@anthropic-ai/claude-agent-sdk'
 import { z } from 'zod'
 import { createOrcaCliCall, type OrcaCliCall } from './orca-cli-call'
 import { loadOrcaDocs, searchOrcaDocs } from './orca-docs-search'
+import { toolText } from './orca-app-tool-text'
+import { buildOrcaSettingsTools } from './orca-app-settings-tools'
+import { buildOrcaWorkspaceTools } from './orca-app-workspace-tools'
 
 const ORCA_APP_INSTRUCTIONS = `You are running inside Orca, the user's IDE, as its built-in agent. The orca tools act in the app the user is looking at:
 - After changing files, open the most important one at the changed line (open_file) or show its diff (show_diff); use open_changed_files for a set of changes.
 - After UI or web changes, open the running page with open_preview.
 - Use run_in_terminal for long-running or interactive commands the user should watch, such as dev servers.
 - For questions about Orca itself (features, shortcuts, settings, how to do something in this app), call search_orca_docs before answering.
+- Workspaces: list_worktrees, create_worktree for a separate task, remove_worktree only when the user asks.
+- hand_off_to_agent passes the task to another agent with a self-contained summary; use it when the user asks, or when you are blocked (e.g. out of usage).
+- get_orca_settings / update_orca_setting change workflow settings such as the default agent; confirm before changing anything the user did not ask for.
 Paths are relative to the workspace root.`
 
 /** Tools that only open or show things in the app; they need no approval. */
@@ -16,21 +22,16 @@ export const ORCA_APP_READ_ONLY_TOOLS = [
   'mcp__orca__show_diff',
   'mcp__orca__open_changed_files',
   'mcp__orca__open_preview',
-  'mcp__orca__search_orca_docs'
+  'mcp__orca__search_orca_docs',
+  'mcp__orca__list_worktrees',
+  'mcp__orca__get_orca_settings'
 ]
 
 type Sdk = Pick<typeof ClaudeAgentSdk, 'createSdkMcpServer' | 'tool'>
 
-function text(
-  value: string,
-  isError = false
-): { content: { type: 'text'; text: string }[]; isError?: boolean } {
-  return { content: [{ type: 'text', text: value }], ...(isError ? { isError } : {}) }
-}
-
 async function viaCli(call: OrcaCliCall, args: readonly string[], done: string) {
   const result = await call(args)
-  return result.ok ? text(done) : text(`Orca could not do that: ${result.output}`, true)
+  return result.ok ? toolText(done) : toolText(`Orca could not do that: ${result.output}`, true)
 }
 
 function isWebUrl(value: string): boolean {
@@ -77,7 +78,7 @@ export function buildOrcaAppTools(sdk: Sdk, call: OrcaCliCall, cwd: string) {
       async ({ url }) =>
         isWebUrl(url)
           ? viaCli(call, ['tab', 'create', '--url', url, ...worktree], `Opened ${url}.`)
-          : text('Only http and https URLs can be previewed.', true)
+          : toolText('Only http and https URLs can be previewed.', true)
     ),
     sdk.tool(
       'run_in_terminal',
@@ -104,7 +105,7 @@ export function buildOrcaAppTools(sdk: Sdk, call: OrcaCliCall, cwd: string) {
       { query: z.string().min(1) },
       async ({ query }) => {
         const hits = searchOrcaDocs(await loadOrcaDocs(), query)
-        return text(
+        return toolText(
           hits.length === 0
             ? 'No Orca docs matched; answer from general knowledge and say so.'
             : hits.map((hit) => `## ${hit.title} (${hit.path})\n${hit.excerpt}`).join('\n\n')
@@ -127,7 +128,11 @@ export function orcaAppToolOptions(
   const server = sdk.createSdkMcpServer({
     name: 'orca',
     instructions: ORCA_APP_INSTRUCTIONS,
-    tools: buildOrcaAppTools(sdk, call, cwd)
+    tools: [
+      ...buildOrcaAppTools(sdk, call, cwd),
+      ...buildOrcaWorkspaceTools(sdk, call, cwd),
+      ...buildOrcaSettingsTools(sdk)
+    ]
   })
   return { mcpServers: { orca: server }, allowedTools: ORCA_APP_READ_ONLY_TOOLS }
 }
