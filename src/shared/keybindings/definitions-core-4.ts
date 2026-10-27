@@ -122,5 +122,13 @@ export const KEYBINDING_DEFINITION_CORE_4: readonly KeybindingDefinition[] = [
     scope: 'chat',
     searchKeywords: ['shortcut', 'chat', 'side', 'fork', 'btw', 'question'],
     defaultBindings: platformBindings(['Mod+;'])
+  },
+  {
+    id: 'claudePanel.toggle',
+    title: 'Show, Focus or Hide the Claude Panel',
+    group: 'Global',
+    scope: 'global',
+    searchKeywords: ['shortcut', 'claude', 'agent', 'chat', 'panel', 'toggle', 'focus'],
+    defaultBindings: platformBindings(['Mod+I'])
   }
 ]

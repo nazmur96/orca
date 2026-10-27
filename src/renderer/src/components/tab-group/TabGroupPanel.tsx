@@ -1,3 +1,4 @@
+import { ClaudePanelHeaderActions } from '@/fork/claude-panel/ClaudePanelHeaderActions'
 import { Suspense, useCallback, useMemo } from 'react'
 import { lazyWithRetry as lazy } from '@/lib/lazy-with-retry'
 import { useDroppable } from '@dnd-kit/core'
@@ -293,6 +294,7 @@ export default function TabGroupPanel({
               className={actionChromeClassName}
               style={{ WebkitAppRegion: 'no-drag' } as React.CSSProperties}
             >
+              <ClaudePanelHeaderActions worktreeId={worktreeId} groupId={groupId} />
               <TabBarQuickCommandsButton
                 worktreeId={worktreeId}
                 groupId={groupId}

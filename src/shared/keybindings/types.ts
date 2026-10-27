@@ -101,6 +101,7 @@ export type KeybindingActionId =
   | 'editor.nextChange'
   | 'editor.addReviewNote'
   | 'editor.addSelectionToChat'
+  | 'claudePanel.toggle'
   | 'chat.openSideChat'
   | 'sourceControl.sendReviewNotes'
   | 'fileExplorer.undo'

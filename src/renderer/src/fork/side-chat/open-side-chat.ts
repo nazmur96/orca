@@ -7,6 +7,7 @@ import { beginStructuredAgentSessionProvisionalLaunch } from '@/lib/agent-sessio
 import { captureNativeChatComposerFocusIntent } from '@/components/native-chat/use-native-chat-composer-reveal-focus'
 import { resolveUnifiedTabLabel } from '../../../../shared/tab-title-resolution'
 import { linkSideChat } from './side-chat-registry'
+import { readClaudePanelGroupId } from '../claude-panel/claude-panel-registry'
 
 export type SideChatSource = {
   tabId: string
@@ -58,7 +59,13 @@ export async function openSideChat(source: SideChatSource): Promise<boolean> {
   const focusIntent = captureNativeChatComposerFocusIntent()
   const forkedSessionId = await forkConversation(source)
   const groupId = forkedSessionId
-    ? useAppStore.getState().createEmptySplitGroup(source.worktreeId, source.groupId, 'right')
+    ? useAppStore
+        .getState()
+        .createEmptySplitGroup(
+          source.worktreeId,
+          source.groupId,
+          readClaudePanelGroupId(source.worktreeId) === source.groupId ? 'down' : 'right'
+        )
     : null
   if (!forkedSessionId || !groupId) {
     focusIntent.cancel()

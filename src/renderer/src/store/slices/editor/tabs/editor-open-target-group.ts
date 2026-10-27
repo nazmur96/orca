@@ -11,6 +11,9 @@ import {
 } from '@/lib/link-open-intent'
 import type { LinkPlacementState } from '@/lib/link-open-intent'
 import { collectTabGroupLayoutGroupIds } from '../../../../../../shared/workspace-layout/tab-group-moves'
+import { readClaudePanelGroupId } from '@/fork/claude-panel/claude-panel-registry'
+import { pickNonPanelGroupId } from '@/fork/claude-panel/claude-panel-layout'
+
 export {
   isLiveLinkOpenGroup as isLiveEditorOpenGroup,
   canOpenLinkInSourceGroup
@@ -84,6 +87,10 @@ export function resolveEditorOpenTargetGroupId(
   const activeGroup =
     groups.find((group) => group.id === state.activeGroupIdByWorktree?.[worktreeId]) ??
     fallbackGroup
+  const panelGroupId = readClaudePanelGroupId(worktreeId)
+  if (panelGroupId === activeGroup.id) {
+    return pickNonPanelGroupId(groups, [...tabsById.values()], panelGroupId) ?? activeGroup.id
+  }
   const activeTab = getGroupActiveTab(activeGroup, tabsById)
   // Only focused agent terminals defer to existing editors; other pane kinds open where the user looks (#6891).
   if (!activeTab || activeTab.contentType !== 'terminal') {

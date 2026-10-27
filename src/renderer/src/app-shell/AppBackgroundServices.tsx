@@ -1,3 +1,4 @@
+import { ClaudePanelController } from '@/fork/claude-panel/ClaudePanelController'
 import { Suspense } from 'react'
 import { lazyWithRetry as lazy } from '@/lib/lazy-with-retry'
 import { AgentHibernationGate } from '../components/AgentHibernationGate'
@@ -36,6 +37,7 @@ export function AppBackgroundServices(): React.JSX.Element {
         </Suspense>
       ) : null}
       <AgentHibernationGate />
+      <ClaudePanelController />
       <StructuredAgentSessionStatusBridge />
       {/* Background chats have no mounted pane but still need completion attention. */}
       <StructuredAgentSessionAttentionBridge />
