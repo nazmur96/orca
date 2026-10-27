@@ -1,0 +1,16 @@
+/* Fork: Claude orange is the one accent, the way Cursor uses a single brand color.
+   Loaded after main.css so these win over Orca's neutral primary. */
+:root {
+  --claude-accent: #d97757;
+  --primary: #c96442;
+  --primary-foreground: #ffffff;
+  --ring: #d97757;
+  --ai-action-accent: #d97757;
+}
+
+.dark {
+  --primary: #d97757;
+  --primary-foreground: #1a1a1a;
+  --ring: #d97757;
+  --ai-action-accent: #d97757;
+}

@@ -128,7 +128,7 @@ export function WorkbenchSectionBar({
             onClick={() => choose(section)}
             className={cn(
               'flex items-center gap-1.5 rounded-md px-2 py-0.5 text-xs text-muted-foreground hover:bg-accent hover:text-foreground',
-              section === active && 'bg-accent text-foreground'
+              section === active && 'bg-accent text-primary'
             )}
           >
             <Icon className="size-3.5" aria-hidden />
