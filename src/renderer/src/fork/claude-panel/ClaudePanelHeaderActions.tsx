@@ -1,9 +1,18 @@
-import { History, Maximize2, Minimize2, PanelRightClose, SquarePen } from 'lucide-react'
+import {
+  Code2,
+  History,
+  Maximize2,
+  MessagesSquare,
+  Minimize2,
+  PanelRightClose,
+  SquarePen
+} from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { translate } from '@/i18n/i18n'
 import { useAppStore } from '@/store'
 import { openAgentSessionHistoryModal } from '@/components/right-sidebar/agent-session-history-modal'
 import { useClaudePanelState } from './claude-panel-registry'
+import { toggleClaudeView } from './claude-panel-view'
 import {
   hideClaudePanel,
   isClaudePanelMaximized,
@@ -48,9 +57,24 @@ export function ClaudePanelHeaderActions({
   if (panelState.groupIdByWorktree[worktreeId] !== groupId) {
     return null
   }
+  const agentsView = (panelState.viewByWorktree[worktreeId] ?? 'agents') === 'agents'
   const maximized = isClaudePanelMaximized(worktreeId)
   return (
     <div className="flex items-center gap-0.5">
+      <HeaderButton
+        label={
+          agentsView
+            ? translate('components.claudePanel.ideView', 'Open the IDE view (Ctrl+E)')
+            : translate('components.claudePanel.agentsView', 'Back to the Agents view (Ctrl+E)')
+        }
+        onClick={() => toggleClaudeView(worktreeId)}
+      >
+        {agentsView ? (
+          <Code2 className="size-3.5" aria-hidden />
+        ) : (
+          <MessagesSquare className="size-3.5" aria-hidden />
+        )}
+      </HeaderButton>
       <HeaderButton
         label={translate('components.claudePanel.newChat', 'New Claude chat')}
         onClick={() => newClaudeChatInPanel(worktreeId)}

@@ -1,7 +1,14 @@
 import type { TabContentType, TabGroupLayoutNode } from '../../../../shared/tab-types'
 import { isEditorTabContentType } from '@/store/slices/editor/tabs/editor-tab-content-type'
 
-/** The split that directly holds a group's leaf, as the `nodePath` Orca's ratio setter takes. */
+function containsGroup(node: TabGroupLayoutNode, groupId: string): boolean {
+  return node.type === 'leaf'
+    ? node.groupId === groupId
+    : containsGroup(node.first, groupId) || containsGroup(node.second, groupId)
+}
+
+/** The nearest left/right split whose side holds the group, as the `nodePath` Orca's ratio setter takes.
+ *  Up/down splits (a side chat under the panel) are skipped: they live inside the Claude column. */
 export function findGroupSplit(
   layout: TabGroupLayoutNode,
   groupId: string,
@@ -12,13 +19,14 @@ export function findGroupSplit(
   }
   for (const side of ['first', 'second'] as const) {
     const child = layout[side]
-    if (child.type === 'leaf' && child.groupId === groupId) {
-      return { path, side }
+    if (!containsGroup(child, groupId)) {
+      continue
     }
-    const found = findGroupSplit(child, groupId, path ? `${path}.${side}` : side)
-    if (found) {
-      return found
+    const nearer = findGroupSplit(child, groupId, path ? `${path}.${side}` : side)
+    if (nearer) {
+      return nearer
     }
+    return layout.direction === 'horizontal' ? { path, side } : null
   }
   return null
 }

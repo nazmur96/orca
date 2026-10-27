@@ -170,7 +170,7 @@ export const KEYBINDING_DEFINITION_CORE_1: readonly KeybindingDefinition[] = [
     group: 'Global',
     scope: 'global',
     searchKeywords: ['shortcut', 'dictation', 'voice', 'speech', 'microphone'],
-    defaultBindings: platformBindings(['Mod+E'])
+    defaultBindings: platformBindings(['Mod+Shift+Space'])
   },
   {
     id: 'view.tasks',

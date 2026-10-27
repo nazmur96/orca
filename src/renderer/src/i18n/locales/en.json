@@ -20581,7 +20581,9 @@
       "history": "Chat history",
       "restore": "Show the editor again",
       "maximize": "Give Claude the full width",
-      "hide": "Hide the Claude panel (Ctrl+I)"
+      "hide": "Hide the Claude panel (Ctrl+I)",
+      "ideView": "Open the IDE view (Ctrl+E)",
+      "agentsView": "Back to the Agents view (Ctrl+E)"
     },
     "workbench": {
       "terminals": "Terminals",

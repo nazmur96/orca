@@ -130,5 +130,13 @@ export const KEYBINDING_DEFINITION_CORE_4: readonly KeybindingDefinition[] = [
     scope: 'global',
     searchKeywords: ['shortcut', 'claude', 'agent', 'chat', 'panel', 'toggle', 'focus'],
     defaultBindings: platformBindings(['Mod+I'])
+  },
+  {
+    id: 'claudePanel.toggleView',
+    title: 'Switch Between Agents and IDE View',
+    group: 'Global',
+    scope: 'global',
+    searchKeywords: ['shortcut', 'claude', 'agents', 'ide', 'editor', 'view', 'layout'],
+    defaultBindings: platformBindings(['Mod+E'])
   }
 ]

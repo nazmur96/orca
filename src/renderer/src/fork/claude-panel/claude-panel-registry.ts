@@ -2,13 +2,21 @@ import { useSyncExternalStore } from 'react'
 
 const STORAGE_KEY = 'orca-fork.claudePanel.v1'
 
+export type ClaudeView = 'agents' | 'editor'
+
 type PanelState = {
   groupIdByWorktree: Record<string, string>
+  viewByWorktree: Record<string, ClaudeView>
   editorRatioByWorktree: Record<string, number>
   hidden: boolean
 }
 
-const EMPTY: PanelState = { groupIdByWorktree: {}, editorRatioByWorktree: {}, hidden: false }
+const EMPTY: PanelState = {
+  groupIdByWorktree: {},
+  viewByWorktree: {},
+  editorRatioByWorktree: {},
+  hidden: false
+}
 
 let state: PanelState = load()
 const listeners = new Set<() => void>()
@@ -27,6 +35,7 @@ function load(): PanelState {
     const ratios: unknown = Reflect.get(parsed, 'editorRatioByWorktree')
     return {
       groupIdByWorktree: stringRecord(groups),
+      viewByWorktree: viewRecord(Reflect.get(parsed, 'viewByWorktree')),
       editorRatioByWorktree: numberRecord(ratios),
       hidden: Reflect.get(parsed, 'hidden') === true
     }
@@ -38,6 +47,12 @@ function load(): PanelState {
 function stringRecord(value: unknown): Record<string, string> {
   return value && typeof value === 'object'
     ? Object.fromEntries(Object.entries(value).filter(([, v]) => typeof v === 'string'))
+    : {}
+}
+
+function viewRecord(value: unknown): Record<string, ClaudeView> {
+  return value && typeof value === 'object'
+    ? Object.fromEntries(Object.entries(value).filter(([, v]) => v === 'agents' || v === 'editor'))
     : {}
 }
 
@@ -73,6 +88,15 @@ export function setClaudePanelGroupId(worktreeId: string, groupId: string | null
     delete groups[worktreeId]
   }
   commit({ ...state, groupIdByWorktree: groups })
+}
+
+/** The app opens in the Agents view; IDE is the editor layout. */
+export function readClaudeView(worktreeId: string): ClaudeView {
+  return state.viewByWorktree[worktreeId] ?? 'agents'
+}
+
+export function setClaudeView(worktreeId: string, view: ClaudeView): void {
+  commit({ ...state, viewByWorktree: { ...state.viewByWorktree, [worktreeId]: view } })
 }
 
 export function isClaudePanelHidden(): boolean {

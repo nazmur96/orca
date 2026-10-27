@@ -47,3 +47,22 @@ describe('pickNonPanelGroupId', () => {
     expect(pickNonPanelGroupId([groups[2]], tabs, 'panel')).toBeNull()
   })
 })
+
+describe('findGroupSplit with a side chat below the panel', () => {
+  it('returns the left/right split holding the Claude column, not the up/down one', () => {
+    const column: TabGroupLayoutNode = {
+      type: 'split',
+      direction: 'vertical',
+      first: leaf('panel'),
+      second: leaf('side')
+    }
+    expect(findGroupSplit(split(leaf('work'), column), 'panel')).toEqual({
+      path: '',
+      side: 'second'
+    })
+    expect(findGroupSplit(split(column, leaf('work')), 'panel')).toEqual({
+      path: '',
+      side: 'first'
+    })
+  })
+})
