@@ -1,3 +1,4 @@
+import { WorkbenchSectionBar, useWorkbenchSections } from '@/fork/workbench/WorkbenchSectionBar'
 import { ClaudePanelHeaderActions } from '@/fork/claude-panel/ClaudePanelHeaderActions'
 import { Suspense, useCallback, useMemo } from 'react'
 import { lazyWithRetry as lazy } from '@/lib/lazy-with-retry'
@@ -80,7 +81,7 @@ export default function TabGroupPanel({
     editorItems,
     tabBarOrder,
     terminalTabs
-  } = model
+  } = useWorkbenchSections(model, worktreeId, groupId)
   // Why: one strip owns the worktree's client-hosted rows, or every split repeats them.
   const ownsClientHostedRows = useAppStore(
     (state) =>
@@ -289,6 +290,7 @@ export default function TabGroupPanel({
                 }
               />
             ) : null}
+            <WorkbenchSectionBar worktreeId={worktreeId} groupId={groupId} model={model} />
             <div className="min-w-0 flex-1 h-full">{tabBar}</div>
             <div
               className={actionChromeClassName}

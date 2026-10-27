@@ -20582,6 +20582,12 @@
       "restore": "Show the editor again",
       "maximize": "Give Claude the full width",
       "hide": "Hide the Claude panel (Ctrl+I)"
+    },
+    "workbench": {
+      "terminals": "Terminals",
+      "files": "Files",
+      "changes": "Changes",
+      "browser": "Browser"
     }
   },
   "dashboardPopout": {
