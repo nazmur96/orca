@@ -34,6 +34,9 @@ export function applyClaudeView(worktreeId: string): void {
 }
 
 export function toggleClaudeView(worktreeId: string): void {
-  setClaudeView(worktreeId, readClaudeView(worktreeId) === 'agents' ? 'editor' : 'agents')
+  const next = readClaudeView(worktreeId) === 'agents' ? 'editor' : 'agents'
+  setClaudeView(worktreeId, next)
   applyClaudeView(worktreeId)
+  // The workbench has its own Files section, so the Agents view drops the file sidebar like Cursor's agent window.
+  useAppStore.getState().setRightSidebarOpen(next === 'editor')
 }

@@ -8,17 +8,30 @@ import {
   readClaudePanelGroupId,
   setClaudePanelGroupId
 } from './claude-panel-registry'
-import { findGroupSplit, rightmostLeafGroupId } from './claude-panel-layout'
+import {
+  containsGroup,
+  findAdoptablePanelGroupId,
+  findGroupSplit,
+  rightmostLeafGroupId
+} from './claude-panel-layout'
 
 /** Share of the width the editor side keeps when the panel is first created. */
 export const CLAUDE_PANEL_EDITOR_RATIO = 0.62
 
 const inFlight = new Set<string>()
 
+/** The registered panel, only while its group is still on screen in the workspace layout. */
 export function liveClaudePanelGroupId(worktreeId: string): string | null {
   const groupId = readClaudePanelGroupId(worktreeId)
-  const groups = useAppStore.getState().groupsByWorktree[worktreeId] ?? []
-  return groupId && groups.some((group) => group.id === groupId) ? groupId : null
+  const state = useAppStore.getState()
+  const layout = state.layoutByWorktree[worktreeId]
+  const groups = state.groupsByWorktree[worktreeId] ?? []
+  return groupId &&
+    layout &&
+    containsGroup(layout, groupId) &&
+    groups.some((group) => group.id === groupId)
+    ? groupId
+    : null
 }
 
 export function launchClaudeChatInPanel(worktreeId: string, groupId: string): void {
@@ -69,6 +82,15 @@ export function ensureClaudePanel(worktreeId: string): void {
   const state = useAppStore.getState()
   const layout = state.layoutByWorktree[worktreeId]
   if (!layout || (state.groupsByWorktree[worktreeId] ?? []).length === 0) {
+    return
+  }
+  const adopted =
+    layout.type === 'split'
+      ? findAdoptablePanelGroupId(layout, state.unifiedTabsByWorktree[worktreeId] ?? [])
+      : null
+  if (adopted) {
+    // The saved id went stale (e.g. set before the layout was restored); take the column back.
+    setClaudePanelGroupId(worktreeId, adopted)
     return
   }
   inFlight.add(worktreeId)

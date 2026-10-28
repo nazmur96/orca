@@ -12,9 +12,11 @@ export function ClaudePanelController(): null {
   const hasLayout = useAppStore((s) =>
     worktreeId ? Boolean(s.layoutByWorktree[worktreeId]) : false
   )
+  // Before the saved layout is restored the panel's group looks missing; acting then made a duplicate.
+  const sessionReady = useAppStore((s) => s.workspaceSessionReady)
 
   useEffect(() => {
-    if (!worktreeId || !hasLayout) {
+    if (!worktreeId || !hasLayout || !sessionReady) {
       return undefined
     }
     ensureClaudePanel(worktreeId)
@@ -23,7 +25,7 @@ export function ClaudePanelController(): null {
     // A new panel's moved-out groups are pruned a tick later, rebuilding the split.
     const timer = setTimeout(() => applyClaudeView(worktreeId), 50)
     return () => clearTimeout(timer)
-  }, [worktreeId, hasLayout])
+  }, [worktreeId, hasLayout, sessionReady])
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent): void => {

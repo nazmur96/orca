@@ -1,7 +1,7 @@
 import type { TabContentType, TabGroupLayoutNode } from '../../../../shared/tab-types'
 import { isEditorTabContentType } from '@/store/slices/editor/tabs/editor-tab-content-type'
 
-function containsGroup(node: TabGroupLayoutNode, groupId: string): boolean {
+export function containsGroup(node: TabGroupLayoutNode, groupId: string): boolean {
   return node.type === 'leaf'
     ? node.groupId === groupId
     : containsGroup(node.first, groupId) || containsGroup(node.second, groupId)
@@ -50,4 +50,30 @@ export function pickNonPanelGroupId(
     return active ? isEditorTabContentType(active.contentType) : false
   })
   return (showsEditor ?? others[0])?.id ?? null
+}
+
+function leafOrder(layout: TabGroupLayoutNode): string[] {
+  return layout.type === 'leaf'
+    ? [layout.groupId]
+    : [...leafOrder(layout.first), ...leafOrder(layout.second)]
+}
+
+/** A Claude column the registry lost (e.g. it ran before the saved layout was restored).
+ *  Side chats split below the panel, so the first Claude-only group in layout order is the panel. */
+export function findAdoptablePanelGroupId(
+  layout: TabGroupLayoutNode,
+  tabs: readonly { groupId: string; contentType: TabContentType; agentSessionAgent?: unknown }[]
+): string | null {
+  for (const groupId of leafOrder(layout)) {
+    const inGroup = tabs.filter((tab) => tab.groupId === groupId)
+    if (
+      inGroup.length > 0 &&
+      inGroup.every(
+        (tab) => tab.contentType === 'agent-session' && tab.agentSessionAgent === 'claude'
+      )
+    ) {
+      return groupId
+    }
+  }
+  return null
 }

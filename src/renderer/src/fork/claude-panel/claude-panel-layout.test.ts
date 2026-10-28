@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import type { TabGroupLayoutNode } from '../../../../shared/tab-types'
-import { findGroupSplit, pickNonPanelGroupId, rightmostLeafGroupId } from './claude-panel-layout'
+import {
+  findAdoptablePanelGroupId,
+  findGroupSplit,
+  pickNonPanelGroupId,
+  rightmostLeafGroupId
+} from './claude-panel-layout'
 
 const leaf = (groupId: string): TabGroupLayoutNode => ({ type: 'leaf', groupId })
 const split = (first: TabGroupLayoutNode, second: TabGroupLayoutNode): TabGroupLayoutNode => ({
@@ -64,5 +69,37 @@ describe('findGroupSplit with a side chat below the panel', () => {
       path: '',
       side: 'first'
     })
+  })
+})
+
+describe('findAdoptablePanelGroupId', () => {
+  const claude = (id: string, groupId: string) => ({
+    id,
+    groupId,
+    contentType: 'agent-session' as const,
+    agentSessionAgent: 'claude'
+  })
+  const file = (id: string, groupId: string) => ({ id, groupId, contentType: 'editor' as const })
+
+  it('adopts the first Claude-only group in layout order, so the panel wins over its side chat', () => {
+    const column: TabGroupLayoutNode = {
+      type: 'split',
+      direction: 'vertical',
+      first: leaf('panel'),
+      second: leaf('side')
+    }
+    const layout = split(column, leaf('work'))
+    const tabs = [claude('c1', 'panel'), claude('c2', 'side'), file('f1', 'work')]
+    expect(findAdoptablePanelGroupId(layout, tabs)).toBe('panel')
+  })
+
+  it('ignores mixed and empty groups, and other agents', () => {
+    const layout = split(leaf('mixed'), split(leaf('codex'), leaf('empty')))
+    const tabs = [
+      claude('c1', 'mixed'),
+      file('f1', 'mixed'),
+      { ...claude('x1', 'codex'), agentSessionAgent: 'codex' }
+    ]
+    expect(findAdoptablePanelGroupId(layout, tabs)).toBeNull()
   })
 })
