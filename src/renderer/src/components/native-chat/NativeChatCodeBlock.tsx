@@ -1,3 +1,4 @@
+import { RunInTerminalButton } from '@/fork/chat-run/RunInTerminalButton'
 import React, { useContext } from 'react'
 import { WrapText } from 'lucide-react'
 import { translate } from '@/i18n/i18n'
@@ -33,6 +34,7 @@ export function NativeChatCodeBlock({
   )
   const actions = code ? (
     <>
+      <RunInTerminalButton code={code} language={language} />
       <NativeChatCodeWrapButton wrapped={wrapped} onToggle={() => setWrapped(!wrapped)} />
       <NativeChatCopyButton
         text={code}
