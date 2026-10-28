@@ -138,5 +138,13 @@ export const KEYBINDING_DEFINITION_CORE_4: readonly KeybindingDefinition[] = [
     scope: 'global',
     searchKeywords: ['shortcut', 'claude', 'agents', 'ide', 'editor', 'view', 'layout'],
     defaultBindings: platformBindings(['Mod+E'])
+  },
+  {
+    id: 'editor.inlineEdit',
+    title: 'Edit Selection with Claude',
+    group: 'Editors',
+    scope: 'editor',
+    searchKeywords: ['shortcut', 'editor', 'claude', 'inline', 'edit', 'cmd+k', 'rewrite'],
+    defaultBindings: platformBindings(['Mod+K'])
   }
 ]

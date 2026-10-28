@@ -1,5 +1,48 @@
 import { ipcMain } from 'electron'
 import { keepClaudeEdits, listClaudeEdits, undoClaudeEdits } from './claude-edit-baselines'
+import { runClaudeInlineEdit } from '../inline-edit/claude-inline-edit'
+import type { ClaudeInlineEditRequest } from '../../../shared/fork-claude-edits'
+
+function parseInlineEditRequest(request: unknown): ClaudeInlineEditRequest | null {
+  if (!request || typeof request !== 'object') {
+    return null
+  }
+  const field = (key: string): string | null => {
+    const value: unknown = Reflect.get(request, key)
+    return typeof value === 'string' ? value : null
+  }
+  const [workspacePath, filePath, language, instruction, selection, before, after] = [
+    'workspacePath',
+    'filePath',
+    'language',
+    'instruction',
+    'selection',
+    'before',
+    'after'
+  ].map(field)
+  if (
+    workspacePath === null ||
+    filePath === null ||
+    language === null ||
+    !instruction?.trim() ||
+    selection === null ||
+    before === null ||
+    after === null
+  ) {
+    return null
+  }
+  const model = field('model')
+  return {
+    workspacePath,
+    filePath,
+    language,
+    instruction,
+    selection,
+    before,
+    after,
+    ...(model ? { model } : {})
+  }
+}
 
 function stringList(value: unknown): string[] | undefined {
   return Array.isArray(value)
@@ -9,6 +52,12 @@ function stringList(value: unknown): string[] | undefined {
 
 /** Renderer access to the edit review: list pending Claude edits, keep or undo them. */
 export function registerClaudeEditsHandlers(): void {
+  ipcMain.handle('aiVault:claudeInlineEdit', async (_event, request: unknown) => {
+    const parsed = parseInlineEditRequest(request)
+    return parsed
+      ? runClaudeInlineEdit(parsed)
+      : { ok: false, error: 'Invalid inline edit request.' }
+  })
   ipcMain.handle('aiVault:listClaudeEdits', async (_event, workspacePath: unknown) =>
     typeof workspacePath === 'string' ? listClaudeEdits(workspacePath) : []
   )

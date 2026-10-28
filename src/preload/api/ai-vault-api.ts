@@ -1,4 +1,9 @@
-import type { ClaudeEdit, ResolveClaudeEditsRequest } from '../../shared/fork-claude-edits'
+import type {
+  ClaudeEdit,
+  ClaudeInlineEditRequest,
+  ClaudeInlineEditResult,
+  ResolveClaudeEditsRequest
+} from '../../shared/fork-claude-edits'
 import type {
   AiVaultSearchRequest,
   AiVaultSearchResponse,
@@ -60,6 +65,8 @@ export type AiVaultApi = {
   listClaudeEdits: (workspacePath: string) => Promise<ClaudeEdit[]>
   /** Fork: keep (forget the snapshot) or undo (restore it) pending Claude edits. */
   resolveClaudeEdits: (request: ResolveClaudeEditsRequest) => Promise<void>
+  /** Fork: Cmd+K, one quick Claude rewrite of a selection. */
+  claudeInlineEdit: (request: ClaudeInlineEditRequest) => Promise<ClaudeInlineEditResult>
   listSubagentSessions: (args: AiVaultSubagentListArgs) => Promise<AiVaultSubagentListResult>
   getFirstUserPrompt: (args: AiVaultFirstUserPromptArgs) => Promise<AiVaultFirstUserPromptResult>
   /** Moves a deletable session's transcript to the OS trash; local sessions only. */

@@ -20604,6 +20604,12 @@
       "review": "Review",
       "undoAll": "Undo all",
       "keepAll": "Keep all"
+    },
+    "inlineEdit": {
+      "placeholder": "Edit with Claude… (Enter to send, Esc to cancel)",
+      "accept": "Accept (Ctrl+Enter)",
+      "reject": "Reject (Esc)",
+      "working": "Claude is editing…"
     }
   },
   "dashboardPopout": {

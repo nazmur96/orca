@@ -101,6 +101,8 @@ export function createWebAiVaultApi(): NonNullable<Partial<PreloadApi>['aiVault'
     copyChatForSideChat: () => Promise.reject(new Error('Side chats need the desktop app.')),
     listClaudeEdits: () => Promise.resolve([]),
     resolveClaudeEdits: () => Promise.resolve(),
+    claudeInlineEdit: () =>
+      Promise.resolve({ ok: false as const, error: 'Inline edit needs the desktop app.' }),
     // Why: no server-side RPC for subagent transcript listing yet, so report an empty (not erroring) result.
     listSubagentSessions: () => Promise.resolve({ sessions: [], issues: [] }),
     // Why: full first-prompt re-parse is local-FS only; web/runtime falls back to preview text.

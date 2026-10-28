@@ -3,6 +3,7 @@ import * as monaco from 'monaco-editor'
 import type { editor } from 'monaco-editor'
 import { freezeEditorContextEntry, setEditorContextEntry } from './editor-context-store'
 import { installAddSelectionToChatShortcut } from './editor-context-add-selection'
+import { installInlineEditShortcut } from '../inline-edit/inline-edit-shortcut'
 
 export function useEditorContextTracking({
   editor: codeEditor,
@@ -57,11 +58,17 @@ export function useEditorContextTracking({
       codeEditor.getContainerDomNode(),
       worktreeId
     )
+    const removeInlineEdit = installInlineEditShortcut(codeEditor, {
+      worktreeId,
+      relativePath,
+      language
+    })
     return () => {
       for (const subscription of subscriptions) {
         subscription.dispose()
       }
       removeShortcut()
+      removeInlineEdit()
       freezeEditorContextEntry(worktreeId, codeEditor.getId())
     }
   }, [codeEditor, worktreeId, relativePath, language, enabled])

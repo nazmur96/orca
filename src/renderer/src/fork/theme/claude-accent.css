@@ -14,3 +14,64 @@
   --ring: #d97757;
   --ai-action-accent: #d97757;
 }
+
+/* Cmd+K inline edit (fork/inline-edit). */
+.fork-inline-edit-selected {
+  background: color-mix(in srgb, var(--claude-accent, #d97757) 10%, transparent);
+}
+.fork-inline-edit-removed {
+  background: color-mix(in srgb, #e5534b 18%, transparent);
+}
+.fork-inline-edit-prompt,
+.fork-inline-edit-preview {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 4px 8px;
+  font-family: var(--font-sans, sans-serif);
+  font-size: 12px;
+  z-index: 5;
+}
+.fork-inline-edit-preview {
+  flex-direction: column;
+  align-items: stretch;
+}
+.fork-inline-edit-input {
+  flex: 1;
+  max-width: 560px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--claude-accent, #d97757);
+  background: var(--background);
+  color: var(--foreground);
+  outline: none;
+}
+.fork-inline-edit-status {
+  color: var(--muted-foreground);
+}
+.fork-inline-edit-added {
+  margin: 0;
+  padding: 2px 8px;
+  background: color-mix(in srgb, #57ab5a 18%, transparent);
+  font-family: var(--font-mono, monospace);
+  white-space: pre;
+  overflow: hidden;
+}
+.fork-inline-edit-actions {
+  display: flex;
+  gap: 6px;
+}
+.fork-inline-edit-actions button {
+  padding: 2px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--secondary);
+  color: var(--foreground);
+  cursor: pointer;
+}
+.fork-inline-edit-actions .fork-inline-edit-accept {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-color: transparent;
+}

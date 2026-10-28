@@ -1,4 +1,7 @@
-import type { ResolveClaudeEditsRequest } from '../../shared/fork-claude-edits'
+import type {
+  ClaudeInlineEditRequest,
+  ResolveClaudeEditsRequest
+} from '../../shared/fork-claude-edits'
 import { createSessionSearchClient } from '../../shared/ai-vault-search-client'
 import type { AiVaultSearchRequest, AiVaultSearchStatus } from '../../shared/ai-vault-search-types'
 import type { ExecutionHostId, ExecutionHostScope } from '../../shared/execution-host'
@@ -58,6 +61,8 @@ export const aiVaultApi = {
     ipcRenderer.invoke('aiVault:listClaudeEdits', workspacePath),
   resolveClaudeEdits: (request: ResolveClaudeEditsRequest) =>
     ipcRenderer.invoke('aiVault:resolveClaudeEdits', request),
+  claudeInlineEdit: (request: ClaudeInlineEditRequest) =>
+    ipcRenderer.invoke('aiVault:claudeInlineEdit', request),
   listSubagentSessions: (args: AiVaultSubagentListArgs) =>
     ipcRenderer.invoke('aiVault:listSubagentSessions', args),
   getFirstUserPrompt: (args: AiVaultFirstUserPromptArgs) =>

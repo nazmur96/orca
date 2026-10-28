@@ -103,6 +103,7 @@ export type KeybindingActionId =
   | 'editor.addSelectionToChat'
   | 'claudePanel.toggle'
   | 'claudePanel.toggleView'
+  | 'editor.inlineEdit'
   | 'chat.openSideChat'
   | 'sourceControl.sendReviewNotes'
   | 'fileExplorer.undo'

@@ -13,3 +13,19 @@ export type ResolveClaudeEditsRequest = {
   /** Workspace-relative paths; omitted means every pending edit. */
   paths?: string[]
 }
+
+/** Cmd+K: rewrite a selection with one quick Claude answer. */
+export type ClaudeInlineEditRequest = {
+  workspacePath: string
+  filePath: string
+  language: string
+  instruction: string
+  selection: string
+  before: string
+  after: string
+  model?: string
+}
+
+export type ClaudeInlineEditResult =
+  | { ok: true; replacement: string }
+  | { ok: false; error: string }
