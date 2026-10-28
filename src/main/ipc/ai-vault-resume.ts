@@ -14,6 +14,7 @@ import { copyStructuredChatConversation } from '../ai-vault/structured-chat-conv
 import { wakeNativeChatTranscriptDistro } from '../native-chat/native-chat-open-wake'
 import { wslDistroForPath } from '../wsl/wsl-unc-access-gate'
 import { copyChatForSideChat } from '../fork/side-chat-conversation-copy'
+import { registerClaudeEditsHandlers } from '../fork/claude-edits/claude-edits-ipc'
 
 export type AiVaultResumeHandlerOptions = {
   ensureStructuredSessionOwnership?: () => Promise<void>
@@ -33,6 +34,7 @@ export function registerAiVaultResumeHandler(options: AiVaultResumeHandlerOption
     await options.ensureStructuredSessionOwnership?.()
     return copyChatForSideChat(source)
   })
+  registerClaudeEditsHandlers()
 }
 
 export async function prepareAiVaultSessionResume(

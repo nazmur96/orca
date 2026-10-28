@@ -1,3 +1,4 @@
+import { ClaudeEditsBar } from '@/fork/claude-edits/ClaudeEditsBar'
 import { WorkbenchSectionBar, useWorkbenchSections } from '@/fork/workbench/WorkbenchSectionBar'
 import { ClaudePanelHeaderActions } from '@/fork/claude-panel/ClaudePanelHeaderActions'
 import { Suspense, useCallback, useMemo } from 'react'
@@ -321,6 +322,7 @@ export default function TabGroupPanel({
           </div>
         </div>
       )}
+      <ClaudeEditsBar worktreeId={worktreeId} groupId={groupId} />
 
       <div
         ref={setBodyRef}

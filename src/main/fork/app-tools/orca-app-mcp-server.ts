@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { createOrcaCliCall, type OrcaCliCall } from './orca-cli-call'
 import { loadOrcaDocs, searchOrcaDocs } from './orca-docs-search'
 import { toolText } from './orca-app-tool-text'
+import { withClaudeEditHooks } from '../claude-edits/claude-edit-hooks'
 import { buildOrcaSettingsTools } from './orca-app-settings-tools'
 import { buildOrcaWorkspaceTools } from './orca-app-workspace-tools'
 
@@ -120,10 +121,12 @@ export function orcaAppToolOptions(
   sdk: Sdk,
   env: Readonly<Record<string, string | undefined>>,
   cwd: string
-): Pick<ClaudeAgentSdk.Options, 'mcpServers' | 'allowedTools'> {
+): Pick<ClaudeAgentSdk.Options, 'mcpServers' | 'allowedTools' | 'hooks'> {
+  // Edit snapshots for the Keep/Undo review do not depend on the CLI.
+  const editHooks = withClaudeEditHooks(undefined, cwd)
   const call = createOrcaCliCall(env, cwd)
   if (!call) {
-    return {}
+    return editHooks
   }
   const server = sdk.createSdkMcpServer({
     name: 'orca',
@@ -134,5 +137,5 @@ export function orcaAppToolOptions(
       ...buildOrcaSettingsTools(sdk)
     ]
   })
-  return { mcpServers: { orca: server }, allowedTools: ORCA_APP_READ_ONLY_TOOLS }
+  return { mcpServers: { orca: server }, allowedTools: ORCA_APP_READ_ONLY_TOOLS, ...editHooks }
 }

@@ -20593,6 +20593,17 @@
       "files": "Files",
       "changes": "Changes",
       "browser": "Browser"
+    },
+    "claudeEdits": {
+      "reviewTitle": "Review Claude’s changes",
+      "newFile": "(new)",
+      "undoFile": "Undo this file",
+      "keepFile": "Keep this file",
+      "nothingLeft": "Nothing left to review.",
+      "summary": "{{count}} files changed",
+      "review": "Review",
+      "undoAll": "Undo all",
+      "keepAll": "Keep all"
     }
   },
   "dashboardPopout": {

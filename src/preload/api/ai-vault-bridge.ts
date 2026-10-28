@@ -1,3 +1,4 @@
+import type { ResolveClaudeEditsRequest } from '../../shared/fork-claude-edits'
 import { createSessionSearchClient } from '../../shared/ai-vault-search-client'
 import type { AiVaultSearchRequest, AiVaultSearchStatus } from '../../shared/ai-vault-search-types'
 import type { ExecutionHostId, ExecutionHostScope } from '../../shared/execution-host'
@@ -53,6 +54,10 @@ export const aiVaultApi = {
     ipcRenderer.invoke('aiVault:prepareSessionResume', args),
   copyChatForSideChat: (source: { sessionId: string; workspaceId: string }) =>
     ipcRenderer.invoke('aiVault:copyChatForSideChat', source),
+  listClaudeEdits: (workspacePath: string) =>
+    ipcRenderer.invoke('aiVault:listClaudeEdits', workspacePath),
+  resolveClaudeEdits: (request: ResolveClaudeEditsRequest) =>
+    ipcRenderer.invoke('aiVault:resolveClaudeEdits', request),
   listSubagentSessions: (args: AiVaultSubagentListArgs) =>
     ipcRenderer.invoke('aiVault:listSubagentSessions', args),
   getFirstUserPrompt: (args: AiVaultFirstUserPromptArgs) =>
