@@ -1,3 +1,4 @@
+import { NewAgentSidebarButton } from '@/fork/claude-panel/NewAgentSidebarButton'
 import React from 'react'
 import { BookOpen, CalendarClock, EyeOff, Files, Search, Smartphone } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -87,6 +88,7 @@ const SidebarNav = React.memo(function SidebarNav() {
       className="flex flex-col gap-0.5 px-2 pt-2 pb-1"
       data-contextual-tour-target="sidebar-navigation"
     >
+      <NewAgentSidebarButton />
       <button
         type="button"
         onClick={() => openModal('worktree-palette')}

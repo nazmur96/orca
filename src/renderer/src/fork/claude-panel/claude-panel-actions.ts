@@ -113,7 +113,7 @@ export function focusClaudePanelComposer(worktreeId: string): void {
 export function newClaudeChatInPanel(worktreeId: string): void {
   const panel = liveClaudePanelGroupId(worktreeId)
   if (panel) {
-    launchClaudeChatInPanel(worktreeId, panel)
+    launchClaudeChatInPanel(worktreeId, panel, { focusComposer: true })
   }
 }
 

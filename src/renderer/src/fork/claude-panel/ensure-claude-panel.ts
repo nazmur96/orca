@@ -1,4 +1,5 @@
 import { useAppStore } from '@/store'
+import { captureNativeChatComposerFocusIntent } from '@/components/native-chat/use-native-chat-composer-reveal-focus'
 import { adoptAgentSessionLaunchVerdict } from '@/lib/agent-session-launch-plan'
 import { newAgentLaunchRequestId } from '@/lib/agent-launch-request-id'
 import { beginStructuredAgentSessionProvisionalLaunch } from '@/lib/agent-session/structured-agent-session-provisional-tab'
@@ -34,7 +35,11 @@ export function liveClaudePanelGroupId(worktreeId: string): string | null {
     : null
 }
 
-export function launchClaudeChatInPanel(worktreeId: string, groupId: string): void {
+export function launchClaudeChatInPanel(
+  worktreeId: string,
+  groupId: string,
+  options: { focusComposer?: boolean } = {}
+): void {
   const plan = adoptAgentSessionLaunchVerdict({
     route: 'structured-native-chat',
     requestId: newAgentLaunchRequestId(),
@@ -44,7 +49,8 @@ export function launchClaudeChatInPanel(worktreeId: string, groupId: string): vo
   const launch = beginStructuredAgentSessionProvisionalLaunch({
     plan,
     hooks: {},
-    targetGroupId: groupId
+    targetGroupId: groupId,
+    ...(options.focusComposer ? { focusIntent: captureNativeChatComposerFocusIntent() } : {})
   })
   if (!launch) {
     console.warn('[claude-panel] could not start a Claude chat in the panel')

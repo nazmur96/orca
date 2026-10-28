@@ -20583,7 +20583,8 @@
       "maximize": "Give Claude the full width",
       "hide": "Hide the Claude panel (Ctrl+I)",
       "ideView": "Open the IDE view (Ctrl+E)",
-      "agentsView": "Back to the Agents view (Ctrl+E)"
+      "agentsView": "Back to the Agents view (Ctrl+E)",
+      "newAgent": "New agent"
     },
     "workbench": {
       "terminals": "Terminals",

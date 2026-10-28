@@ -401,7 +401,9 @@ describe('SidebarNav', () => {
     )
     const tasksButton = getButtonByText(container, 'Tasks')
 
-    expect(nav?.firstElementChild).toBe(searchButton)
+    // Fork: Cursor-style "New agent" sits above search.
+    expect(nav?.firstElementChild?.textContent).toBe('New agent')
+    expect(nav?.children[1]).toBe(searchButton)
     if (!searchButton) {
       throw new Error('worktree palette search button not rendered')
     }
