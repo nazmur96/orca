@@ -47,6 +47,7 @@ import {
 import type { NativeChatFileLinkContext } from './native-chat-file-link'
 import type { NativeChatMessageListHandle } from './use-native-chat-reveal-latest'
 import type { NativeChatRewindSurface } from './use-native-chat-rewind'
+import type { SideChatSource } from '@/fork/side-chat/open-side-chat'
 
 type NativeChatContextMenuState = {
   open: boolean
@@ -71,6 +72,8 @@ type UseNativeChatContextMenuArgs = {
   showTerminalPaneActions?: boolean
   splitShortcutLabels?: { right: string; down: string }
   chatPane?: { tabId: string; worktreeId: string; groupId: string }
+  /** A Claude chat whose selections can also go to its side chat. */
+  sideChatSource?: SideChatSource
   /** A structured chat tab's Orca session ID; a chat in a terminal pane is that terminal's agent. */
   resolveOrcaSessionId?: () => Promise<string | null>
 } & NativeChatContextMenuTargetArgs
@@ -140,6 +143,7 @@ export function useNativeChatContextMenu({
   showTerminalPaneActions = true,
   splitShortcutLabels,
   chatPane,
+  sideChatSource,
   resolveOrcaSessionId,
   messageListRef,
   fileLinkContext = null,
@@ -231,6 +235,7 @@ export function useNativeChatContextMenu({
           rootRef={rootRef}
           composerRef={composerRef}
           enabled={enabled && !(state.open && hasItems)}
+          sideChatSource={sideChatSource}
         />
         <DropdownMenuTrigger asChild>
           <button
@@ -279,6 +284,7 @@ export function useNativeChatContextMenu({
             target={target}
             composerRef={composerRef}
             rewind={rewind}
+            sideChatSource={sideChatSource}
           />
           {state.canPaste ? (
             <DropdownMenuItem onSelect={() => actions.onPaste()}>

@@ -5,6 +5,7 @@ import { keybindingMatchesAction } from '../../../../shared/keybindings'
 import { ensureClaudePanel } from './ensure-claude-panel'
 import { runClaudePanelToggle, syncClaudePanelVisibility } from './claude-panel-actions'
 import { applyClaudeView, toggleClaudeView } from './claude-panel-view'
+import { newWorkbenchTerminal, showWorkbenchTerminals } from '../workbench/workbench-terminals'
 
 /** Mounted once: gives each workspace its Claude panel and owns Ctrl+I. */
 export function ClaudePanelController(): null {
@@ -39,7 +40,11 @@ export function ClaudePanelController(): null {
         ? runClaudePanelToggle
         : keybindingMatchesAction('claudePanel.toggleView', event, platform, state.keybindings)
           ? toggleClaudeView
-          : null
+          : keybindingMatchesAction('workbench.newTerminal', event, platform, state.keybindings)
+            ? newWorkbenchTerminal
+            : keybindingMatchesAction('workbench.showTerminals', event, platform, state.keybindings)
+              ? showWorkbenchTerminals
+              : null
       if (run) {
         event.preventDefault()
         event.stopPropagation()

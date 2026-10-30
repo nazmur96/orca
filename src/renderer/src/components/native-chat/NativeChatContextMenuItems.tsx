@@ -10,6 +10,8 @@ import type { NativeChatComposerHandle } from './native-chat-composer-types'
 import type { NativeChatContextMenuTarget } from './native-chat-context-menu-target'
 import { formatNativeChatQuote } from './native-chat-quote-selection'
 import type { NativeChatRewindSurface } from './use-native-chat-rewind'
+import type { SideChatSource } from '@/fork/side-chat/open-side-chat'
+import { AddToSideChatMenuItem } from '@/fork/side-chat/AddToSideChatButton'
 
 function copyText(text: string): void {
   // Best-effort, as the hover copy buttons are: the clipboard can reject when unfocused.
@@ -20,11 +22,13 @@ function copyText(text: string): void {
 export function NativeChatContextMenuTargetItems({
   target,
   composerRef,
-  rewind
+  rewind,
+  sideChatSource
 }: {
   target: NativeChatContextMenuTarget
   composerRef: RefObject<NativeChatComposerHandle | null>
   rewind: NativeChatRewindSurface | undefined
+  sideChatSource?: SideChatSource
 }): React.JSX.Element {
   const { quoteText, link, codeText, messageText, rewindItemId } = target
   const linkRows = link ? [link.primary, link.alternate, ...(link.secondaryActions ?? [])] : []
@@ -38,6 +42,7 @@ export function NativeChatContextMenuTargetItems({
           {translate('components.native-chat.addSelectionToChat', 'Add to chat')}
         </DropdownMenuItem>
       ) : null}
+      {quoteText ? <AddToSideChatMenuItem source={sideChatSource} text={quoteText} /> : null}
       {linkRows.map((action) =>
         action ? (
           <DropdownMenuItem key={action.label} onSelect={() => void action.run()}>

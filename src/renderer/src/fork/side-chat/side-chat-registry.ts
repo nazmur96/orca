@@ -35,6 +35,11 @@ export function readSideChatLink(sideSessionId: string): SideChatLink | null {
   return links.get(sideSessionId) ?? null
 }
 
+/** Side chats of a main chat, oldest first. */
+export function sideChatsOf(mainSessionId: string): string[] {
+  return [...links].filter(([, link]) => link.mainSessionId === mainSessionId).map(([id]) => id)
+}
+
 export function useSideChatLink(sideSessionId: string): SideChatLink | null {
   const read = (): ReturnType<typeof readSideChatLink> => readSideChatLink(sideSessionId)
   return useSyncExternalStore(subscribe, read, read)

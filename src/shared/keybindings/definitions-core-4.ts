@@ -146,5 +146,21 @@ export const KEYBINDING_DEFINITION_CORE_4: readonly KeybindingDefinition[] = [
     scope: 'editor',
     searchKeywords: ['shortcut', 'editor', 'claude', 'inline', 'edit', 'cmd+k', 'rewrite'],
     defaultBindings: platformBindings(['Mod+K'])
+  },
+  {
+    id: 'workbench.showTerminals',
+    title: 'Show Terminals',
+    group: 'Global',
+    scope: 'global',
+    searchKeywords: ['shortcut', 'terminal', 'workbench', 'show', 'focus', 'cursor'],
+    defaultBindings: platformBindings(['Mod+`'])
+  },
+  {
+    id: 'workbench.newTerminal',
+    title: 'New Terminal Beside the Chat',
+    group: 'Global',
+    scope: 'global',
+    searchKeywords: ['shortcut', 'terminal', 'workbench', 'new', 'cursor'],
+    defaultBindings: platformBindings(['Mod+Shift+`'])
   }
 ]

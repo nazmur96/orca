@@ -20086,7 +20086,8 @@
         "openFailed": "Could not open a side chat.",
         "tabLabel": "Side chat · {{name}}",
         "tabLabelBare": "Side chat",
-        "noReply": "The side chat has no reply to hand back yet."
+        "noReply": "The side chat has no reply to hand back yet.",
+        "addSelection": "Add to side chat"
       }
     },
     "tab": {
@@ -22487,7 +22488,9 @@
       "chatOpenSideChat": "Open side chat",
       "claudePanelToggle": "Show, Focus or Hide the Claude Panel",
       "claudePanelToggleView": "Switch Between Agents and IDE View",
-      "editorInlineEdit": "Edit Selection with Claude"
+      "editorInlineEdit": "Edit Selection with Claude",
+      "workbenchShowTerminals": "Show Terminals",
+      "workbenchNewTerminal": "New Terminal Beside the Chat"
     },
     "group": {
       "global": "Global",

@@ -16,11 +16,11 @@ export type SideChatSource = {
   sessionId: string
 }
 
-function notifyOpenFailed(): false {
+function notifyOpenFailed(): null {
   toast.error(
     translate('components.native-chat.sideChat.openFailed', 'Could not open a side chat.')
   )
-  return false
+  return null
 }
 
 /** An unowned copy of the conversation, so resuming it never shares a writer with the main chat. */
@@ -54,8 +54,8 @@ function labelSideChat(source: SideChatSource, sideSessionId: string): void {
   )
 }
 
-/** Fork the chat into a new split on its right, its composer then switches it to Ask for approval. */
-export async function openSideChat(source: SideChatSource): Promise<boolean> {
+/** Fork the chat into a new split on its right, its composer then switches it to Ask for approval; returns its session. */
+export async function openSideChat(source: SideChatSource): Promise<string | null> {
   const focusIntent = captureNativeChatComposerFocusIntent()
   const forkedSessionId = await forkConversation(source)
   const groupId = forkedSessionId
@@ -94,7 +94,7 @@ export async function openSideChat(source: SideChatSource): Promise<boolean> {
   const settlement = await launch.settlement
   if (settlement.kind !== 'structured') {
     closePane()
-    return settlement.kind === 'failed' && settlement.notified ? false : notifyOpenFailed()
+    return settlement.kind === 'failed' && settlement.notified ? null : notifyOpenFailed()
   }
   labelSideChat(source, settlement.sessionId)
   linkSideChat(settlement.sessionId, {
@@ -103,5 +103,5 @@ export async function openSideChat(source: SideChatSource): Promise<boolean> {
     worktreeId: source.worktreeId,
     askModePending: true
   })
-  return true
+  return settlement.sessionId
 }

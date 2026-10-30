@@ -69,6 +69,10 @@ export function useStructuredNativeChatPaneCommands({
     chatPane:
       ownerWorktreeId && groupId && terminalPaneActions === undefined
         ? { tabId, worktreeId: ownerWorktreeId, groupId }
+        : undefined,
+    sideChatSource:
+      ownerWorktreeId && groupId && pane.agent === 'claude'
+        ? { tabId, worktreeId: ownerWorktreeId, groupId, sessionId }
         : undefined
   })
   const onKeyDownCapture = useCallback<KeyboardEventHandler<HTMLDivElement>>(

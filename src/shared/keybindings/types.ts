@@ -103,6 +103,8 @@ export type KeybindingActionId =
   | 'editor.addSelectionToChat'
   | 'claudePanel.toggle'
   | 'claudePanel.toggleView'
+  | 'workbench.showTerminals'
+  | 'workbench.newTerminal'
   | 'editor.inlineEdit'
   | 'chat.openSideChat'
   | 'sourceControl.sendReviewNotes'

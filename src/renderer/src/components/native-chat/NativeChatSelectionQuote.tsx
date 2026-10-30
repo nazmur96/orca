@@ -11,6 +11,8 @@ import {
   readNativeChatQuotableSelection,
   readNativeChatTranscriptSelection
 } from './native-chat-quote-selection'
+import type { SideChatSource } from '@/fork/side-chat/open-side-chat'
+import { AddToSideChatButton } from '@/fork/side-chat/AddToSideChatButton'
 
 // Why: shown at once, a double-click's action would sit under the pointer and take the third click.
 const DOUBLE_CLICK_SETTLE_MS = 500
@@ -23,11 +25,13 @@ type QuoteRequest = {
 export function NativeChatSelectionQuote({
   rootRef,
   composerRef,
-  enabled
+  enabled,
+  sideChatSource
 }: {
   rootRef: RefObject<HTMLElement | null>
   composerRef: RefObject<NativeChatComposerHandle | null>
   enabled: boolean
+  sideChatSource?: SideChatSource
 }): React.JSX.Element {
   const [request, setRequest] = useState<QuoteRequest | null>(null)
   const contentRef = useRef<HTMLDivElement>(null)
@@ -153,6 +157,11 @@ export function NativeChatSelectionQuote({
               <Quote />
               {translate('components.native-chat.addSelectionToChat', 'Add to chat')}
             </Button>
+            <AddToSideChatButton
+              source={sideChatSource}
+              text={request.text}
+              onDone={() => setRequest(null)}
+            />
           </div>
         </PopoverContent>
       ) : null}
