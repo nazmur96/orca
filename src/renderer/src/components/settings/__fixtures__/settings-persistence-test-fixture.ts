@@ -25,6 +25,9 @@ beforeEach(() => {
     settings: {
       ...getDefaultSettings('/synthetic'),
       experimentalNativeChat: true,
+      // The fork defaults to Claude in Auto; these cases assume upstream's defaults.
+      defaultTuiAgent: null,
+      agentPermissionDefault: 'full-access',
       sourceControlAi: normalizeSourceControlAiSettings({
         ...normalizeSourceControlAiSettings(undefined),
         enabled: false,

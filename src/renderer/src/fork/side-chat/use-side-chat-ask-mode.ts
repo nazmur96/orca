@@ -5,7 +5,7 @@ import { AGENT_CHAT_PERMISSION_MODE_OPTION_ID } from '../../../../shared/agent-c
 import type {
   SessionOptionDescriptor,
   SessionOptionsSurface
-} from '../../../../shared/native-chat-session-options'
+} from '../../../../shared/native-chat/input/native-chat-session-options'
 import { markSideChatAskModeApplied, useSideChatLink } from './side-chat-registry'
 
 const NO_PENDING_MARK = (): void => {}

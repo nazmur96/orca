@@ -110,9 +110,7 @@ export function NativeChatUserMessageRow({
         />
       ) : (
         <div className="max-w-[80%] rounded-xl border border-chat-user-border bg-chat-user-surface px-3.5 py-2.5 text-sm text-chat-foreground-strong">
-          {editorContext ? (
-            <EditorContextTranscriptChip snapshot={editorContext.snapshot} />
-          ) : null}
+          {editorContext ? <EditorContextTranscriptChip snapshot={editorContext.snapshot} /> : null}
           {shownMarkdown ? (
             <>
               <NativeChatImageAttachments

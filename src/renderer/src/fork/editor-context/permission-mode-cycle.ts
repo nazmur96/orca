@@ -6,7 +6,7 @@ import {
 import type {
   SessionOptionDescriptor,
   SessionOptionsSurface
-} from '../../../../shared/native-chat-session-options'
+} from '../../../../shared/native-chat/input/native-chat-session-options'
 import { runSessionOptionSurfaceCall } from '@/components/native-chat/native-chat-session-option-surface-call'
 
 const NO_PENDING_MARK = (): void => {}

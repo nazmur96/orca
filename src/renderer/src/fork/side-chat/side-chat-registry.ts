@@ -36,7 +36,8 @@ export function readSideChatLink(sideSessionId: string): SideChatLink | null {
 }
 
 export function useSideChatLink(sideSessionId: string): SideChatLink | null {
-  return useSyncExternalStore(subscribe, () => readSideChatLink(sideSessionId))
+  const read = (): ReturnType<typeof readSideChatLink> => readSideChatLink(sideSessionId)
+  return useSyncExternalStore(subscribe, read, read)
 }
 
 export function resetSideChatRegistryForTests(): void {

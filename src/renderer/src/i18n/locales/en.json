@@ -20072,6 +20072,21 @@
       },
       "webPeek": {
         "unavailable": "No preview for this page."
+      },
+      "runInTerminal": "Run in terminal",
+      "editorContext": {
+        "turnOn": "Editor context off — turn on",
+        "toggleNext": "Include the editor context in the next message",
+        "turnOff": "Turn off editor context for this chat",
+        "noClaudeChat": "Open a Claude chat in this workspace to add the selection."
+      },
+      "sideChat": {
+        "handBack": "Hand to main agent",
+        "open": "Side chat",
+        "openFailed": "Could not open a side chat.",
+        "tabLabel": "Side chat · {{name}}",
+        "tabLabelBare": "Side chat",
+        "noReply": "The side chat has no reply to hand back yet."
       }
     },
     "tab": {
@@ -22467,7 +22482,12 @@
       "terminalSwitchInputSource": "Switch input source / language (native)",
       "newAgentTab": "New {{agent}} tab",
       "tabNewBrowserSplitRight": "New browser tab in right split",
-      "viewPlugins": "Open Plugins"
+      "viewPlugins": "Open Plugins",
+      "editorAddSelectionToChat": "Add Selection to Chat",
+      "chatOpenSideChat": "Open side chat",
+      "claudePanelToggle": "Show, Focus or Hide the Claude Panel",
+      "claudePanelToggleView": "Switch Between Agents and IDE View",
+      "editorInlineEdit": "Edit Selection with Claude"
     },
     "group": {
       "global": "Global",

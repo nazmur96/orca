@@ -329,7 +329,9 @@ export function NativeChatComposerField({
               disabled={disabled}
               onChange={editorChange}
               onKeyDownCapture={(event) => {
-                if (cyclePermissionModeOnKey(event, sessionOptionsSurface, sessionOptionsSnapshot)) {
+                if (
+                  cyclePermissionModeOnKey(event, sessionOptionsSurface, sessionOptionsSnapshot)
+                ) {
                   event.preventDefault()
                   return
                 }

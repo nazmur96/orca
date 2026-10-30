@@ -159,7 +159,16 @@ const STATIC_TITLE_COPY = {
     translate(
       'keybindings.title.terminalSwitchInputSource',
       'Switch input source / language (native)'
-    )
+    ),
+  'editor.addSelectionToChat': () =>
+    translate('keybindings.title.editorAddSelectionToChat', 'Add Selection to Chat'),
+  'chat.openSideChat': () => translate('keybindings.title.chatOpenSideChat', 'Open side chat'),
+  'claudePanel.toggle': () =>
+    translate('keybindings.title.claudePanelToggle', 'Show, Focus or Hide the Claude Panel'),
+  'claudePanel.toggleView': () =>
+    translate('keybindings.title.claudePanelToggleView', 'Switch Between Agents and IDE View'),
+  'editor.inlineEdit': () =>
+    translate('keybindings.title.editorInlineEdit', 'Edit Selection with Claude')
 } satisfies Record<StaticKeybindingActionId, () => string>
 
 const GROUP_COPY = {

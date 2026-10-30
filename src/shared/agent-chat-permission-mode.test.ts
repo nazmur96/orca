@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { getDefaultSettings } from './constants'
 import {
   AGENT_CHAT_PERMISSION_MODES,
   agentChatPermissionModes,
