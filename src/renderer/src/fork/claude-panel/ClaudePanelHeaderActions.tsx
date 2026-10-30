@@ -11,7 +11,6 @@ import { Button } from '@/components/ui/button'
 import { translate } from '@/i18n/i18n'
 import { useAppStore } from '@/store'
 import { openAgentSessionHistoryModal } from '@/components/right-sidebar/agent-session-history-modal'
-import { ClaudeHandoffButton } from '../handoff/ClaudeHandoffButton'
 import { useClaudePanelState } from './claude-panel-registry'
 import { toggleClaudeView } from './claude-panel-view'
 import {
@@ -62,7 +61,6 @@ export function ClaudePanelHeaderActions({
   const maximized = isClaudePanelMaximized(worktreeId)
   return (
     <div className="flex items-center gap-0.5">
-      <ClaudeHandoffButton worktreeId={worktreeId} tabId={activeTabId} />
       <HeaderButton
         label={
           agentsView
