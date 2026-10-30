@@ -141,3 +141,35 @@ export function claudeEditPathOf(toolInput: unknown): string | null {
 export function resetClaudeEditBaselinesForTests(): void {
   byWorkspace.clear()
 }
+
+/** Per-block undo in the review dialog saves the partly reverted file; only files Claude edited. */
+export async function writeReviewedClaudeEdit(
+  workspace: string,
+  filePath: string,
+  content: string
+): Promise<boolean> {
+  const absolute = insideWorkspace(workspace, filePath)
+  if (!absolute || !byWorkspace.get(resolve(workspace))?.has(absolute)) {
+    return false
+  }
+  await writeFile(absolute, content, 'utf8')
+  return true
+}
+
+/** Record a known "before" (e.g. from git, for Bash edits) unless the file already has one. */
+export function recordClaudeEditBaselineContent(
+  workspace: string,
+  filePath: string,
+  before: string | null,
+  sessionId: string
+): void {
+  const absolute = insideWorkspace(workspace, filePath)
+  if (!absolute) {
+    return
+  }
+  const files = byWorkspace.get(resolve(workspace)) ?? new Map<string, Baseline>()
+  if (!files.has(absolute)) {
+    files.set(absolute, { before, sessionId, recordedAt: Date.now() })
+    byWorkspace.set(resolve(workspace), files)
+  }
+}

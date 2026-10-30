@@ -67,6 +67,12 @@ export type AiVaultApi = {
   resolveClaudeEdits: (request: ResolveClaudeEditsRequest) => Promise<void>
   /** Fork: Cmd+K, one quick Claude rewrite of a selection. */
   claudeInlineEdit: (request: ClaudeInlineEditRequest) => Promise<ClaudeInlineEditResult>
+  /** Fork: save a file after undoing some of Claude's blocks in the review dialog. */
+  writeReviewedClaudeEdit: (request: {
+    workspacePath: string
+    path: string
+    content: string
+  }) => Promise<boolean>
   listSubagentSessions: (args: AiVaultSubagentListArgs) => Promise<AiVaultSubagentListResult>
   getFirstUserPrompt: (args: AiVaultFirstUserPromptArgs) => Promise<AiVaultFirstUserPromptResult>
   /** Moves a deletable session's transcript to the OS trash; local sessions only. */

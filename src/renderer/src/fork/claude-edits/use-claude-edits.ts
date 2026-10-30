@@ -9,6 +9,8 @@ export type ClaudeEditsState = {
   workspacePath: string | null
   edits: ClaudeEdit[]
   resolve: (action: 'keep' | 'undo', paths?: string[]) => Promise<void>
+  /** Save a file after reverting some of Claude's blocks in the review diff. */
+  writeReviewed: (path: string, content: string) => Promise<void>
 }
 
 /** Pending Claude edits for a workspace, refreshed while the panel is on screen. */
@@ -53,5 +55,16 @@ export function useClaudeEdits(worktreeId: string): ClaudeEditsState {
     [refresh, workspacePath]
   )
 
-  return { workspacePath, edits, resolve }
+  const writeReviewed = useCallback(
+    async (path: string, content: string): Promise<void> => {
+      if (!workspacePath) {
+        return
+      }
+      await window.api.aiVault.writeReviewedClaudeEdit({ workspacePath, path, content })
+      await refresh()
+    },
+    [refresh, workspacePath]
+  )
+
+  return { workspacePath, edits, resolve, writeReviewed }
 }

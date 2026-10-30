@@ -80,7 +80,8 @@ describe('withClaudeEditHooks', () => {
     const { withClaudeEditHooks } = await import('./claude-edit-hooks')
     const existing = { PreToolUse: [{ hooks: [] }] }
     const { hooks } = withClaudeEditHooks(existing, ws)
-    expect(hooks.PreToolUse).toHaveLength(2)
+    expect(hooks.PreToolUse).toHaveLength(3)
+    expect(hooks.PostToolUse).toHaveLength(1)
     const hook = hooks.PreToolUse?.[1]?.hooks[0]
     await hook?.(
       {
@@ -97,5 +98,23 @@ describe('withClaudeEditHooks', () => {
     )
     await writeFile(join(ws, 'a.ts'), 'edited\n')
     expect((await listClaudeEdits(ws)).map((edit) => edit.path)).toEqual(['a.ts'])
+  })
+})
+
+describe('writeReviewedClaudeEdit', () => {
+  it('writes a partly reverted file only while it has a pending Claude baseline', async () => {
+    const { writeReviewedClaudeEdit } = await import('./claude-edit-baselines')
+    await recordClaudeEditBaseline(ws, 'a.ts', 's1')
+    await writeFile(join(ws, 'a.ts'), 'one\nTWO\nthree\n')
+    expect(await writeReviewedClaudeEdit(ws, 'a.ts', 'one\ntwo\nthree\n')).toBe(true)
+    expect(await readFile(join(ws, 'a.ts'), 'utf8')).toBe('one\ntwo\nthree\n')
+    expect(await listClaudeEdits(ws)).toMatchObject([{ path: 'a.ts', added: 1, removed: 0 }])
+  })
+
+  it('refuses files Claude has not edited or that lie outside the workspace', async () => {
+    const { writeReviewedClaudeEdit } = await import('./claude-edit-baselines')
+    expect(await writeReviewedClaudeEdit(ws, 'a.ts', 'x')).toBe(false)
+    expect(await writeReviewedClaudeEdit(ws, '../evil.ts', 'x')).toBe(false)
+    expect(await readFile(join(ws, 'a.ts'), 'utf8')).toBe('one\ntwo\n')
   })
 })

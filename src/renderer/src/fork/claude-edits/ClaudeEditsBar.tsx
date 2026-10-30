@@ -62,11 +62,28 @@ function ReviewDialog({
             <div className="flex min-w-0 flex-1 flex-col gap-2">
               <div className="min-h-0 flex-1 overflow-hidden rounded-md border border-border">
                 <DiffEditor
+                  key={selected.path}
                   original={selected.before ?? ''}
                   modified={selected.current ?? ''}
                   language={detectLanguage(selected.path)}
                   theme={isDark ? 'vs-dark' : 'vs'}
-                  options={{ readOnly: true, renderSideBySide: true, minimap: { enabled: false } }}
+                  options={{
+                    originalEditable: false,
+                    renderMarginRevertIcon: true,
+                    renderSideBySide: true,
+                    minimap: { enabled: false }
+                  }}
+                  onMount={(diffEditor) => {
+                    // The margin arrows revert single blocks; save the result shortly after.
+                    let timer: ReturnType<typeof setTimeout> | undefined
+                    const path = selected.path
+                    diffEditor.getModifiedEditor().onDidChangeModelContent(() => {
+                      clearTimeout(timer)
+                      timer = setTimeout(() => {
+                        void state.writeReviewed(path, diffEditor.getModifiedEditor().getValue())
+                      }, 400)
+                    })
+                  }}
                 />
               </div>
               <div className="flex justify-end gap-2">
