@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useAppStore } from '@/store'
 import { selectKnownWorktreeById } from '@/store/selectors'
 import type { ClaudeEdit } from '../../../../shared/fork-claude-edits'
+import { publishClaudeEdits } from './claude-edits-store'
 
 const POLL_MS = 2500
 
@@ -24,7 +25,9 @@ export function useClaudeEdits(worktreeId: string): ClaudeEditsState {
       return
     }
     try {
-      setEdits(await window.api.aiVault.listClaudeEdits(workspacePath))
+      const next = await window.api.aiVault.listClaudeEdits(workspacePath)
+      setEdits(next)
+      publishClaudeEdits(workspacePath, next)
     } catch {
       setEdits([])
     }

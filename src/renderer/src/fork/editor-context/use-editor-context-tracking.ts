@@ -4,6 +4,7 @@ import type { editor } from 'monaco-editor'
 import { freezeEditorContextEntry, setEditorContextEntry } from './editor-context-store'
 import { installAddSelectionToChatShortcut } from './editor-context-add-selection'
 import { installInlineEditShortcut } from '../inline-edit/inline-edit-shortcut'
+import { installClaudeEditGutter } from '../claude-edits/claude-edit-gutter'
 
 export function useEditorContextTracking({
   editor: codeEditor,
@@ -63,12 +64,14 @@ export function useEditorContextTracking({
       relativePath,
       language
     })
+    const removeGutter = installClaudeEditGutter(codeEditor, worktreeId, relativePath)
     return () => {
       for (const subscription of subscriptions) {
         subscription.dispose()
       }
       removeShortcut()
       removeInlineEdit()
+      removeGutter()
       freezeEditorContextEntry(worktreeId, codeEditor.getId())
     }
   }, [codeEditor, worktreeId, relativePath, language, enabled])
