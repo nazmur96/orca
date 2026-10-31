@@ -44,6 +44,7 @@ import type {
   TaskViewPresetId
 } from './ui-chrome-types'
 import type { WorktreeVisibilityDefaults } from './repo-types'
+import type { ClaudeEditorModel } from './fork-claude-editor-model'
 
 export type { WorktreeVisibilityDefaults } from './repo-types'
 
@@ -211,6 +212,8 @@ export type GlobalSettings = GlobalSettingsBase & {
   nativeChatResumeWorkOnRestart?: boolean
   /** Queue editable mid-turn follow-ups until turn end on capable hosts. Absent means on; off sends immediately. */
   nativeChatQueueFollowUps?: boolean
+  /** Fork: Claude model for Cmd+K and editor suggestions; unset means Sonnet. */
+  claudeEditorModel?: ClaudeEditorModel
   /** Teach newly started native chats to create inline visuals; absent means on. */
   nativeChatInlineVisuals?: boolean
   /** Hovering a web link in chat fetches the page to preview it; absent means on. GitHub cards ignore this. */

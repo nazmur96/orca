@@ -2,6 +2,7 @@ import { translate } from '@/i18n/i18n'
 import { AppearanceChatSection } from './AppearanceChatSection'
 import { ChatBehaviorSetting } from './ChatBehaviorSetting'
 import { ChatNamingSetting } from './ChatNamingSetting'
+import { ClaudeEditorModelSetting } from '@/fork/claude-editor/ClaudeEditorModelSetting'
 import { NativeChatInlineVisualsSetting } from './NativeChatInlineVisualsSetting'
 import { SettingsSection } from './SettingsSection'
 import { SettingsSubsectionHeader } from './SettingsFormControls'
@@ -90,6 +91,11 @@ export function ChatSettingsSection({
             settings={settings}
             updateSettings={updateSettings}
             forceVisible={showAllBehavior}
+          />
+          <ClaudeEditorModelSetting
+            settings={settings}
+            updateSettings={updateSettings}
+            forceVisible={matchesSettingsSearch(query, [{ title }])}
           />
           {showDesktopOnlySettings ? (
             <ChatNamingSetting

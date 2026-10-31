@@ -527,7 +527,15 @@
         "antigravityAccount": "Account",
         "antigravitySignInNeeded": "Chats need an Antigravity sign-in, separate from your agy terminal account."
       },
-      "permissionsDescriptionOwnAgents": "New chats follow each agent’s permission in Settings → Agents."
+      "permissionsDescriptionOwnAgents": "New chats follow each agent’s permission in Settings → Agents.",
+      "claudeEditorModel": {
+        "haiku": "Haiku",
+        "sonnet": "Sonnet",
+        "opus": "Opus",
+        "label": "Model",
+        "title": "Claude in the editor",
+        "description": "The model Cmd+K and editor suggestions use. Haiku is fastest, Opus is smartest."
+      }
     },
     "terminal": {
       "optionLayoutAlt": "ABC or U.S. — Option sends Alt/Esc sequences",

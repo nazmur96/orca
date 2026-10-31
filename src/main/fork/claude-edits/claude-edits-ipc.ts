@@ -6,6 +6,7 @@ import {
   writeReviewedClaudeEdit
 } from './claude-edit-baselines'
 import { runClaudeInlineEdit } from '../inline-edit/claude-inline-edit'
+import { claudeEditorModel } from '../../../shared/fork-claude-editor-model'
 import type { ClaudeInlineEditRequest } from '../../../shared/fork-claude-edits'
 
 function parseInlineEditRequest(request: unknown): ClaudeInlineEditRequest | null {
@@ -36,7 +37,6 @@ function parseInlineEditRequest(request: unknown): ClaudeInlineEditRequest | nul
   ) {
     return null
   }
-  const model = field('model')
   return {
     workspacePath,
     filePath,
@@ -45,7 +45,8 @@ function parseInlineEditRequest(request: unknown): ClaudeInlineEditRequest | nul
     selection,
     before,
     after,
-    ...(model ? { model } : {})
+    // Only the models the setting offers reach the CLI.
+    model: claudeEditorModel(field('model'))
   }
 }
 

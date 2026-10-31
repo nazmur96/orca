@@ -4,18 +4,13 @@ import { translate } from '@/i18n/i18n'
 import { useAppStore } from '@/store'
 import { selectKnownWorktreeById } from '@/store/selectors'
 import { isImeOwnedKeyboardEvent } from '@/lib/ime-composition-keyboard-event'
+import { claudeEditorModel } from '../../../../shared/fork-claude-editor-model'
 
 export type InlineEditContext = { worktreeId: string; relativePath: string; language: string }
 
-const MODEL_STORAGE_KEY = 'orca-fork.inlineEditModel'
-
-/** Sonnet by default: inline edits are small and speed matters; set the key to "opus" to switch. */
+/** Settings → Chat → Claude in the editor. */
 export function inlineEditModel(): string {
-  try {
-    return globalThis.localStorage?.getItem(MODEL_STORAGE_KEY) || 'sonnet'
-  } catch {
-    return 'sonnet'
-  }
+  return claudeEditorModel(useAppStore.getState().settings?.claudeEditorModel)
 }
 
 function element<K extends keyof HTMLElementTagNameMap>(
