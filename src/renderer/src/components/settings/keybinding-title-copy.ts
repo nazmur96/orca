@@ -167,6 +167,8 @@ const STATIC_TITLE_COPY = {
     translate('keybindings.title.claudePanelToggle', 'Show, Focus or Hide the Claude Panel'),
   'claudePanel.toggleView': () =>
     translate('keybindings.title.claudePanelToggleView', 'Switch Between Agents and IDE View'),
+  'editor.claudeSuggest': () =>
+    translate('keybindings.title.editorClaudeSuggest', 'Suggest Next Lines with Claude'),
   'workbench.showTerminals': () =>
     translate('keybindings.title.workbenchShowTerminals', 'Show Terminals'),
   'workbench.newTerminal': () =>

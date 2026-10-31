@@ -148,6 +148,14 @@ export const KEYBINDING_DEFINITION_CORE_4: readonly KeybindingDefinition[] = [
     defaultBindings: platformBindings(['Mod+K'])
   },
   {
+    id: 'editor.claudeSuggest',
+    title: 'Suggest Next Lines with Claude',
+    group: 'Editors',
+    scope: 'editor',
+    searchKeywords: ['shortcut', 'editor', 'claude', 'suggest', 'autocomplete', 'complete', 'tab'],
+    defaultBindings: platformBindings(['Alt+\\'])
+  },
+  {
     id: 'workbench.showTerminals',
     title: 'Show Terminals',
     group: 'Global',

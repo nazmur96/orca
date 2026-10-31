@@ -20641,6 +20641,9 @@
       "done": "Done",
       "failed": "Failed",
       "stopped": "Stopped"
+    },
+    "claudeSuggest": {
+      "thinking": " Claude is thinking…"
     }
   },
   "dashboardPopout": {
@@ -22505,7 +22508,8 @@
       "claudePanelToggleView": "Switch Between Agents and IDE View",
       "editorInlineEdit": "Edit Selection with Claude",
       "workbenchShowTerminals": "Show Terminals",
-      "workbenchNewTerminal": "New Terminal Beside the Chat"
+      "workbenchNewTerminal": "New Terminal Beside the Chat",
+      "editorClaudeSuggest": "Suggest Next Lines with Claude"
     },
     "group": {
       "global": "Global",

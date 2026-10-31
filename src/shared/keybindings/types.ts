@@ -106,6 +106,7 @@ export type KeybindingActionId =
   | 'workbench.showTerminals'
   | 'workbench.newTerminal'
   | 'editor.inlineEdit'
+  | 'editor.claudeSuggest'
   | 'chat.openSideChat'
   | 'sourceControl.sendReviewNotes'
   | 'fileExplorer.undo'
