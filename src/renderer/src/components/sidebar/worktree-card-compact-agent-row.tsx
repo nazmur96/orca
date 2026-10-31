@@ -24,6 +24,7 @@ import {
   type ProgramStatusPresentation
 } from '../../../../shared/program-status/presentation'
 import { resolveRowProgramStatus } from '@/lib/program-status/agent-row-presentation'
+import { AgentStatusWord } from '@/fork/agent-status/AgentStatusWord'
 
 function getCompactAgentPrimary(
   agent: DashboardAgentRowData,
@@ -272,6 +273,9 @@ export const CompactAgentRow = React.memo(function CompactAgentRow({
         >
           +{childAgentCount}
         </span>
+      )}
+      {agent.childRow ? null : (
+        <AgentStatusWord agent={agent} state={dotState} label={leadingText} />
       )}
       {cacheTimer && <CacheTimer startedAt={cacheTimer.startedAt} ttlMs={cacheTimer.ttlMs} />}
       {hasChildDisclosure ? (

@@ -29,6 +29,7 @@ import type { DashboardAgentRow as DashboardAgentRowData } from './useDashboardD
 import { getAgentRowPrimaryText } from '../../../../shared/agent-row-primary-text'
 import { useAgentRowConversationName } from './use-agent-row-conversation-name'
 import { lastEnteredDoneAt } from './agent-finished-timestamp'
+import { AgentStatusWord } from '@/fork/agent-status/AgentStatusWord'
 import {
   agentChildRowMessageLine,
   agentChildRowNoUpdateLabel
@@ -326,6 +327,7 @@ const DashboardAgentRow = React.memo(function DashboardAgentRow({
         >
           {displayLabel}
         </span>
+        <AgentStatusWord agent={agent} state={dotState} label={displayLabel} />
         {showModel && model && (
           <span
             className={cn(

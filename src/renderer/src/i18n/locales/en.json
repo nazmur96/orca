@@ -20626,6 +20626,13 @@
       "accept": "Accept (Ctrl+Enter)",
       "reject": "Reject (Esc)",
       "working": "Claude is editing…"
+    },
+    "agentStatusWord": {
+      "working": "Working",
+      "needsYou": "Needs you",
+      "done": "Done",
+      "failed": "Failed",
+      "stopped": "Stopped"
     }
   },
   "dashboardPopout": {
